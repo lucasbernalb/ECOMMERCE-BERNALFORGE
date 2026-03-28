@@ -1,12 +1,38 @@
 "use client"
 
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { useTheme } from 'next-themes'
-import { ShoppingCart, Heart, User, Search, Menu, X, Sun, Moon, Hammer } from 'lucide-react'
+import {
+  ShoppingCart,
+  Heart,
+  User,
+  Search,
+  Menu,
+  X,
+  Sun,
+  Moon,
+  Hammer,
+  LogOut,
+  Settings,
+  Package,
+  Shield,
+} from 'lucide-react'
 import { useCart } from '@/lib/cart-context'
 import { CartSheet } from './cart-sheet'
 import { cn } from '@/lib/utils'
+import { createClient } from '@/lib/supabase/client'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { toast } from 'sonner'
+import type { User as SupabaseUser } from '@supabase/supabase-js'
 
 const categories = [
   { name: 'Power Tools', href: '/category/power-tools' },
@@ -16,11 +42,57 @@ const categories = [
 ]
 
 export function Header() {
+  const router = useRouter()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
+  const [user, setUser] = useState<SupabaseUser | null>(null)
+  const [isAdmin, setIsAdmin] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const { theme, setTheme } = useTheme()
   const { totalItems, toggleCart } = useCart()
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const supabase = createClient()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('is_admin')
+          .eq('id', user.id)
+          .single()
+        setIsAdmin(profile?.is_admin ?? false)
+      }
+
+      setUser(user)
+      setIsLoading(false)
+    }
+
+    checkAuth()
+
+    const supabase = createClient()
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null)
+      if (!session?.user) {
+        setIsAdmin(false)
+      }
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
+
+  const handleSignOut = async () => {
+    const supabase = createClient()
+    await supabase.auth.signOut()
+    toast.success('Signed out successfully')
+    router.push('/')
+  }
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -37,13 +109,77 @@ export function Header() {
           <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 text-sm">
             <p className="text-muted-foreground">Free shipping on orders over $99</p>
             <div className="flex items-center gap-4">
-              <Link href="/auth/login" className="text-muted-foreground hover:text-foreground transition-colors">
-                Sign In
-              </Link>
-              <span className="text-border">|</span>
-              <Link href="/auth/sign-up" className="text-muted-foreground hover:text-foreground transition-colors">
-                Create Account
-              </Link>
+              {!isLoading && (
+                <>
+                  {user ? (
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <button className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+                          <User className="h-4 w-4" />
+                          <span className="hidden md:inline">{user.email?.split('@')[0]}</span>
+                        </button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-56">
+                        <DropdownMenuLabel className="font-normal">
+                          <div className="flex flex-col space-y-1">
+                            <p className="text-sm font-medium">{user.email?.split('@')[0]}</p>
+                            <p className="text-xs text-muted-foreground">{user.email}</p>
+                          </div>
+                        </DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem asChild>
+                          <Link href="/account">
+                            <User className="mr-2 h-4 w-4" /> My Account
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link href="/account/orders">
+                            <Package className="mr-2 h-4 w-4" /> Orders
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link href="/account/settings">
+                            <Settings className="mr-2 h-4 w-4" /> Settings
+                          </Link>
+                        </DropdownMenuItem>
+                        {isAdmin && (
+                          <>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem asChild>
+                              <Link href="/admin">
+                                <Shield className="mr-2 h-4 w-4" /> Admin Panel
+                              </Link>
+                            </DropdownMenuItem>
+                          </>
+                        )}
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          onClick={handleSignOut}
+                          className="text-destructive focus:text-destructive"
+                        >
+                          <LogOut className="mr-2 h-4 w-4" /> Sign Out
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  ) : (
+                    <div className="flex items-center gap-4">
+                      <Link
+                        href="/auth/login"
+                        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        Sign In
+                      </Link>
+                      <span className="text-border">|</span>
+                      <Link
+                        href="/auth/sign-up"
+                        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        Create Account
+                      </Link>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -118,14 +254,44 @@ export function Header() {
                 <Heart className="h-5 w-5" />
               </Link>
 
-              {/* Account */}
-              <Link
-                href="/account"
-                className="hidden h-9 w-9 items-center justify-center rounded-md hover:bg-accent sm:flex"
-                aria-label="Account"
-              >
-                <User className="h-5 w-5" />
-              </Link>
+              {/* Account - Auth Aware */}
+              {!isLoading && user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className="hidden h-9 w-9 items-center justify-center rounded-md hover:bg-accent sm:flex">
+                      <User className="h-5 w-5" />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem asChild>
+                      <Link href="/account">My Account</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/account/orders">Orders</Link>
+                    </DropdownMenuItem>
+                    {isAdmin && (
+                      <DropdownMenuItem asChild>
+                        <Link href="/admin">Admin Panel</Link>
+                      </DropdownMenuItem>
+                    )}
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      onClick={handleSignOut}
+                      className="text-destructive focus:text-destructive"
+                    >
+                      Sign Out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : !isLoading ? (
+                <Link
+                  href="/auth/login"
+                  className="hidden h-9 w-9 items-center justify-center rounded-md hover:bg-accent sm:flex"
+                  aria-label="Sign In"
+                >
+                  <User className="h-5 w-5" />
+                </Link>
+              ) : null}
 
               {/* Cart */}
               <button
@@ -198,21 +364,50 @@ export function Header() {
                 <Heart className="h-4 w-4" />
                 Wishlist
               </Link>
-              <Link
-                href="/account"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors sm:hidden"
-              >
-                <User className="h-4 w-4" />
-                Account
-              </Link>
-              <Link
-                href="/auth/login"
-                onClick={() => setMobileMenuOpen(false)}
-                className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors md:hidden"
-              >
-                Sign In
-              </Link>
+              {!isLoading && (
+                <>
+                  {user ? (
+                    <>
+                      <Link
+                        href="/account"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+                      >
+                        <User className="h-4 w-4" />
+                        Account
+                      </Link>
+                      {isAdmin && (
+                        <Link
+                          href="/admin"
+                          onClick={() => setMobileMenuOpen(false)}
+                          className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+                        >
+                          <Shield className="h-4 w-4" />
+                          Admin Panel
+                        </Link>
+                      )}
+                      <button
+                        onClick={() => {
+                          setMobileMenuOpen(false)
+                          handleSignOut()
+                        }}
+                        className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+                      >
+                        <LogOut className="h-4 w-4" />
+                        Sign Out
+                      </button>
+                    </>
+                  ) : (
+                    <Link
+                      href="/auth/login"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors md:hidden"
+                    >
+                      Sign In
+                    </Link>
+                  )}
+                </>
+              )}
             </div>
           </nav>
         </div>

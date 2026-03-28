@@ -25,6 +25,10 @@ export interface Product {
   category?: Category
 }
 
+export type ProductWithCategory = Product & {
+  category?: Category
+}
+
 export interface CartItem {
   product: Product
   quantity: number

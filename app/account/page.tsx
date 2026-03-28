@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { ChevronRight, User, Package, Heart, LogOut, Settings } from 'lucide-react'
+import { ChevronRight, User, Package, Heart, LogOut, Settings, Shield } from 'lucide-react'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { createClient } from '@/lib/supabase/client'
@@ -13,6 +13,7 @@ import { toast } from 'sonner'
 export default function AccountPage() {
   const router = useRouter()
   const [user, setUser] = useState<SupabaseUser | null>(null)
+  const [isAdmin, setIsAdmin] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -20,11 +21,19 @@ export default function AccountPage() {
       const supabase = createClient()
       const { data: { user } } = await supabase.auth.getUser()
       setUser(user)
-      setIsLoading(false)
 
-      if (!user) {
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('is_admin')
+          .eq('id', user.id)
+          .single()
+        setIsAdmin(profile?.is_admin ?? false)
+      } else {
         router.push('/auth/login')
       }
+
+      setIsLoading(false)
     }
 
     checkAuth()
@@ -149,6 +158,26 @@ export default function AccountPage() {
                 </div>
               </div>
             </Link>
+
+            {/* Admin Panel */}
+            {isAdmin && (
+              <Link
+                href="/admin"
+                className="rounded-lg border border-border p-6 hover:border-primary/50 transition-colors"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                    <Shield className="h-6 w-6 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold">Admin Panel</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Manage products and orders
+                    </p>
+                  </div>
+                </div>
+              </Link>
+            )}
 
             {/* Sign Out */}
             <button

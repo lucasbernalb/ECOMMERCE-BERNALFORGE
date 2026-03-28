@@ -1,6 +1,7 @@
 'use client'
 
-import { useToast } from '@/hooks/use-toast'
+import * as React from 'react'
+import { useToast } from '@/components/ui/use-toast'
 import {
   Toast,
   ToastClose,
@@ -21,7 +22,7 @@ export function Toaster() {
             <div className="grid gap-1">
               {title && <ToastTitle>{title}</ToastTitle>}
               {description && (
-                <ToastDescription>{description}</ToastDescription>
+                <ToastDescription>{description as React.ReactNode}</ToastDescription>
               )}
             </div>
             {action}

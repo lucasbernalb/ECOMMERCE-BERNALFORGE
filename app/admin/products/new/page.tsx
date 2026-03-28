@@ -1,113 +1,121 @@
-import { createClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server"
+import { Category } from "@/lib/types"
+import { slugify } from "@/lib/slugify"
+import { ProductForm } from "./product-form"
 
-async function createProduct(formData: FormData) {
-  "use server";
+async function createProduct(
+  _prevState: { success: boolean; error?: string },
+  formData: FormData
+): Promise<{ success: boolean; error?: string }> {
+  "use server"
 
-  const supabase = await createClient();
+  const name = formData.get("name") as string
+  const slugInput = formData.get("slug") as string
+  const brand = formData.get("brand") as string
+  const price = formData.get("price")
+  const stock = formData.get("stock")
+  const category_id = formData.get("category_id") as string | null
+  const description = formData.get("description") as string | null
+  const featured = formData.get("featured") === "true"
+  const best_seller = formData.get("best_seller") === "true"
 
-  const name = formData.get("name");
-  const slug = formData.get("slug");
-  const brand = formData.get("brand");
-  const price = formData.get("price");
-  const stock = formData.get("stock");
-  const categories_id = formData.get("categories_id");
-  const description = formData.get("description");
+  if (!name?.trim()) {
+    return { success: false, error: "Product name is required" }
+  }
 
-  await supabase.from("products").insert({
-    name,
+  if (!brand?.trim()) {
+    return { success: false, error: "Brand is required" }
+  }
+
+  const slug = slugInput?.trim() ? slugInput.trim() : slugify(name)
+
+  if (!price) {
+    return { success: false, error: "Price is required" }
+  }
+
+  if (!stock) {
+    return { success: false, error: "Stock is required" }
+  }
+
+  const priceNum = Number(price)
+  const stockNum = Number(stock)
+
+  if (isNaN(priceNum) || priceNum < 0) {
+    return { success: false, error: "Price must be a valid positive number" }
+  }
+
+  if (isNaN(stockNum) || stockNum < 0 || !Number.isInteger(stockNum)) {
+    return { success: false, error: "Stock must be a valid non-negative integer" }
+  }
+
+  const supabase = await createClient()
+
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) {
+    return { success: false, error: "You must be logged in to create products" }
+  }
+
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('is_admin')
+    .eq('id', user.id)
+    .single()
+
+  if (!profile?.is_admin) {
+    return { success: false, error: "Admin privileges required" }
+  }
+
+  const { error } = await supabase.from("products").insert({
+    name: name.trim(),
     slug,
-    brand,
-    price,
-    stock,
-    categories_id,
-    description,
-  });
+    brand: brand.trim(),
+    price: priceNum,
+    stock: stockNum,
+    category_id: category_id || null,
+    description: description?.trim() || null,
+    featured,
+    best_seller,
+    images: [],
+    technical_specs: null,
+  })
 
-  redirect("/admin/products");
+  if (error) {
+    if (error.code === "23505") {
+      return { success: false, error: "A product with this slug already exists" }
+    }
+    console.error("Product creation error:", error)
+    return { success: false, error: `Failed to create product: ${error.message}` }
+  }
+
+  return { success: true }
 }
 
-async function getCategories() {
-  const supabase = await createClient();
+async function getCategories(): Promise<Category[]> {
+  const supabase = await createClient()
+  const { data, error } = await supabase.from("categories").select("*").order("name")
 
-  const { data, error } = await supabase.from("categories").select("*");
+  if (error) {
+    console.error("Failed to fetch categories:", error)
+    return []
+  }
 
-  console.log("CATEGORIES:", data);
-  console.log("ERROR:", error);
-
-  return data || [];
+  return data || []
 }
 
 export default async function NewProductPage() {
-  const categories = await getCategories();
+  const categories = await getCategories()
 
   return (
     <div className="max-w-2xl space-y-6">
-      <h1 className="text-3xl font-bold">Add Product</h1>
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">Add Product</h1>
+        <p className="text-muted-foreground mt-1">
+          Create a new product for your store
+        </p>
+      </div>
 
-      <form action={createProduct} className="space-y-4">
-        <input
-          name="name"
-          placeholder="Name"
-          className="w-full border p-2 rounded"
-          required
-        />
-
-        <input
-          name="slug"
-          placeholder="Slug"
-          className="w-full border p-2 rounded"
-          required
-        />
-
-        <input
-          name="brand"
-          placeholder="Brand"
-          className="w-full border p-2 rounded"
-        />
-
-        <input
-          name="price"
-          type="number"
-          placeholder="Price"
-          className="w-full border p-2 rounded"
-          required
-        />
-
-        <input
-          name="stock"
-          type="number"
-          placeholder="Stock"
-          className="w-full border p-2 rounded"
-          required
-        />
-
-        <select
-          name="category_id"
-          className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-        >
-          <option value="">Select category</option>
-
-          {categories?.map((cat: any) => (
-            <option key={cat.id} value={cat.id}>
-              {cat.name}
-            </option>
-          ))}
-        </select>
-
-        <textarea
-          name="description"
-          placeholder="Description"
-          className="w-full border p-2 rounded"
-        />
-
-        <button
-          type="submit"
-          className="bg-primary text-white px-4 py-2 rounded"
-        >
-          Create Product
-        </button>
-      </form>
+      <ProductForm categories={categories} action={createProduct} />
     </div>
-  );
+  )
 }

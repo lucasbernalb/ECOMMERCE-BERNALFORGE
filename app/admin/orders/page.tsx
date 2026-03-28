@@ -55,7 +55,7 @@ export default function AdminOrdersPage() {
     }
 
     setOrders(orders.map(order => 
-      order.id === orderId ? { ...order, status } : order
+      order.id === orderId ? { ...order, status: status as Order['status'] } : order
     ))
     toast.success('Order status updated')
   }
