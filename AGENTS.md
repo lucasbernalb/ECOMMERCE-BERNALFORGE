@@ -130,6 +130,31 @@ import { Button } from '@/components/ui/button'
 - Use `useState` for local component state
 - Use `useReducer` for complex state logic
 
+## Authentication Pattern
+
+- Always validate session server-side for protected routes
+- Never trust client-side auth for admin checks
+- Use profiles.is_admin for role-based access
+- Middleware handles route protection
+
+## Server Actions
+
+- Prefer Server Actions for mutations (insert/update/delete)
+- Keep them in separate files: lib/actions/
+- Always validate input before sending to Supabase
+
+## Performance Guidelines
+
+- Avoid unnecessary Supabase calls in client components
+- Prefer server components for data fetching
+- Minimize useEffect usage
+
+## Supabase RLS
+
+- All queries are affected by RLS policies
+- Ensure SELECT policies allow required access
+- Debug missing data by checking policies first
+
 ### Error Handling
 
 - Use try/catch for async operations
@@ -204,3 +229,54 @@ All types are defined in `lib/types.ts`:
 6. **Accessibility:** Use Radix UI primitives for accessible components. Include proper ARIA attributes for custom components.
 
 7. **Responsive Design:** Use Tailwind responsive prefixes (sm:, md:, lg:, xl:) for mobile-first layouts.
+
+---
+
+## Admin System
+
+### Structure
+
+```
+app/admin/
+├── layout.tsx              # Admin sidebar layout (client component)
+├── page.tsx               # Dashboard with stats
+├── products/
+│   ├── page.tsx           # Product list
+│   └── new/page.tsx       # Create product form
+├── categories/page.tsx    # Category list
+├── orders/page.tsx        # Order management
+├── customers/page.tsx      # Customer list
+└── settings/page.tsx       # Store settings
+```
+
+### Protection
+
+- **Middleware** (`middleware.ts`): First layer - blocks non-authenticated users
+- **Server Components**: Use `requireAdmin()` at top of page for second layer protection
+- **Client Components**: Check admin status in `useEffect` before rendering
+
+### Admin Helper Functions
+
+Use `lib/auth/isAdmin.ts` for admin-related checks:
+
+```typescript
+import { checkAdmin, requireAdmin, requireAuth } from '@/lib/auth/isAdmin'
+
+// Check admin status (returns result, doesn't redirect)
+const result = await checkAdmin()
+if (result.isAdmin) { /* ... */ }
+
+// Require admin (redirects to '/' if not admin)
+await requireAdmin()
+
+// Require auth (redirects to '/auth/login' if not logged in)
+const userId = await requireAuth()
+```
+
+### Best Practices
+
+- Always use `requireAdmin()` in admin pages (Server Components)
+- Wrap Supabase queries in try/catch blocks
+- Use `toast.error()` for user-facing errors
+- Use `console.error()` for debugging
+- Never expose admin functionality to non-admin users

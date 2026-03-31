@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { ShoppingCart } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import type { Order } from '@/lib/types'
@@ -18,46 +19,105 @@ const statusColors: Record<string, string> = {
 }
 
 export default function AdminOrdersPage() {
+  const router = useRouter()
   const [orders, setOrders] = useState<Order[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null)
 
   useEffect(() => {
-    loadOrders()
+    checkAdminAndLoad()
   }, [])
 
-  const loadOrders = async () => {
-    const supabase = createClient()
-    const { data, error } = await supabase
-      .from('orders')
-      .select('*')
-      .order('created_at', { ascending: false })
+  const checkAdminAndLoad = async () => {
+    try {
+      const supabase = createClient()
+      
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
 
-    if (error) {
-      console.error('Error loading orders:', error)
-      setIsLoading(false)
-      return
+      if (!user) {
+        router.push('/auth/login')
+        return
+      }
+
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('is_admin')
+        .eq('id', user.id)
+        .single()
+
+      if (!profile?.is_admin) {
+        toast.error('Access denied. Admin privileges required.')
+        router.push('/')
+        return
+      }
+
+      setIsAuthorized(true)
+      await loadOrders()
+    } catch (error) {
+      console.error('Error checking admin status:', error)
+      toast.error('Failed to verify admin access')
+      router.push('/')
     }
+  }
 
-    setOrders(data || [])
-    setIsLoading(false)
+  const loadOrders = async () => {
+    try {
+      const supabase = createClient()
+      const { data, error } = await supabase
+        .from('orders')
+        .select('*')
+        .order('created_at', { ascending: false })
+
+      if (error) {
+        console.error('Error loading orders:', error)
+        toast.error('Failed to load orders')
+        setIsLoading(false)
+        return
+      }
+
+      setOrders((data ?? []) as Order[])
+    } catch (error) {
+      console.error('Unexpected error loading orders:', error)
+      toast.error('Failed to load orders')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const updateOrderStatus = async (orderId: string, status: string) => {
-    const supabase = createClient()
-    const { error } = await supabase
-      .from('orders')
-      .update({ status, updated_at: new Date().toISOString() })
-      .eq('id', orderId)
+    try {
+      const supabase = createClient()
+      const { error } = await supabase
+        .from('orders')
+        .update({ status, updated_at: new Date().toISOString() })
+        .eq('id', orderId)
 
-    if (error) {
+      if (error) {
+        console.error('Error updating order:', error)
+        toast.error('Failed to update order status')
+        return
+      }
+
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order.id === orderId ? { ...order, status: status as Order['status'] } : order
+        )
+      )
+      toast.success('Order status updated')
+    } catch (error) {
+      console.error('Unexpected error updating order:', error)
       toast.error('Failed to update order status')
-      return
     }
+  }
 
-    setOrders(orders.map(order => 
-      order.id === orderId ? { ...order, status: status as Order['status'] } : order
-    ))
-    toast.success('Order status updated')
+  if (isAuthorized === null || isLoading) {
+    return (
+      <div className="min-h-[50vh] flex items-center justify-center">
+        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent" />
+      </div>
+    )
   }
 
   return (
@@ -71,12 +131,7 @@ export default function AdminOrdersPage() {
 
       <div className="rounded-lg border border-border overflow-hidden">
         <div className="overflow-x-auto">
-          {isLoading ? (
-            <div className="p-12 text-center">
-              <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent" />
-              <p className="text-muted-foreground mt-4">Loading orders...</p>
-            </div>
-          ) : orders.length === 0 ? (
+          {orders.length === 0 ? (
             <div className="p-12 text-center">
               <ShoppingCart className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <p className="text-lg font-medium">No orders yet</p>

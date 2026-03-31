@@ -1,6 +1,9 @@
 import { Settings, Store, CreditCard, Mail, Shield } from 'lucide-react'
+import { requireAdmin } from '@/lib/auth/isAdmin'
 
-export default function AdminSettingsPage() {
+export default async function AdminSettingsPage() {
+  await requireAdmin()
+
   return (
     <div className="space-y-6">
       <div>

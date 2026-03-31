@@ -2,21 +2,34 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Plus, Package } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
+import { requireAdmin } from '@/lib/auth/isAdmin'
+import type { ProductWithCategory } from '@/lib/types'
 
-async function getProducts() {
-  const supabase = await createClient()
-  const { data } = await supabase
-    .from('products')
-    .select(`
-      *,
-      category:categories(name)
-    `)
-    .order('created_at', { ascending: false })
+async function getProducts(): Promise<ProductWithCategory[]> {
+  try {
+    const supabase = await createClient()
+    const { data, error } = await supabase
+      .from('products')
+      .select(`
+        *,
+        category:categories(name)
+      `)
+      .order('created_at', { ascending: false })
 
-  return data || []
+    if (error) {
+      console.error('Error fetching products:', error)
+      return []
+    }
+
+    return (data ?? []) as ProductWithCategory[]
+  } catch (error) {
+    console.error('Unexpected error fetching products:', error)
+    return []
+  }
 }
 
 export default async function AdminProductsPage() {
+  await requireAdmin()
   const products = await getProducts()
 
   return (

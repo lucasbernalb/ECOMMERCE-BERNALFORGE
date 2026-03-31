@@ -1,18 +1,31 @@
 import Image from 'next/image'
 import { FolderOpen } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
+import { requireAdmin } from '@/lib/auth/isAdmin'
+import type { Category } from '@/lib/types'
 
-async function getCategories() {
-  const supabase = await createClient()
-  const { data } = await supabase
-    .from('categories')
-    .select('*')
-    .order('name')
+async function getCategories(): Promise<Category[]> {
+  try {
+    const supabase = await createClient()
+    const { data, error } = await supabase
+      .from('categories')
+      .select('*')
+      .order('name')
 
-  return data || []
+    if (error) {
+      console.error('Error fetching categories:', error)
+      return []
+    }
+
+    return (data ?? []) as Category[]
+  } catch (error) {
+    console.error('Unexpected error fetching categories:', error)
+    return []
+  }
 }
 
 export default async function AdminCategoriesPage() {
+  await requireAdmin()
   const categories = await getCategories()
 
   return (

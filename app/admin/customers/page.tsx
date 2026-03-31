@@ -1,17 +1,30 @@
 import { Users } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
+import { requireAdmin } from '@/lib/auth/isAdmin'
+import type { Profile } from '@/lib/types'
 
-async function getCustomers() {
-  const supabase = await createClient()
-  const { data } = await supabase
-    .from('profiles')
-    .select('*')
-    .order('created_at', { ascending: false })
+async function getCustomers(): Promise<Profile[]> {
+  try {
+    const supabase = await createClient()
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .order('created_at', { ascending: false })
 
-  return data || []
+    if (error) {
+      console.error('Error fetching customers:', error)
+      return []
+    }
+
+    return (data ?? []) as Profile[]
+  } catch (error) {
+    console.error('Unexpected error fetching customers:', error)
+    return []
+  }
 }
 
 export default async function AdminCustomersPage() {
+  await requireAdmin()
   const customers = await getCustomers()
 
   return (

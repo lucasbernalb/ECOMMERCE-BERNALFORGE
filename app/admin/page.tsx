@@ -1,43 +1,84 @@
 import { Package, FolderOpen, ShoppingCart, Users, DollarSign, TrendingUp } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
+import { requireAdmin } from '@/lib/auth/isAdmin'
 
-async function getStats() {
-  const supabase = await createClient()
-  
-  const [productsResult, categoriesResult, ordersResult] = await Promise.all([
-    supabase.from('products').select('id', { count: 'exact' }),
-    supabase.from('categories').select('id', { count: 'exact' }),
-    supabase.from('orders').select('id, total_amount, status'),
-  ])
+interface Stats {
+  totalProducts: number
+  totalCategories: number
+  totalOrders: number
+  totalRevenue: number
+  pendingOrders: number
+}
 
-  const totalProducts = productsResult.count || 0
-  const totalCategories = categoriesResult.count || 0
-  const orders = ordersResult.data || []
-  const totalOrders = orders.length
-  const totalRevenue = orders.reduce((sum, order) => sum + Number(order.total_amount), 0)
-  const pendingOrders = orders.filter(order => order.status === 'pending').length
+interface Order {
+  id: string
+  customer_name: string
+  customer_email: string
+  total_amount: number
+  status: string
+  created_at: string
+}
 
-  return {
-    totalProducts,
-    totalCategories,
-    totalOrders,
-    totalRevenue,
-    pendingOrders,
+async function getStats(): Promise<Stats> {
+  try {
+    const supabase = await createClient()
+    
+    const [productsResult, categoriesResult, ordersResult] = await Promise.all([
+      supabase.from('products').select('id', { count: 'exact' }),
+      supabase.from('categories').select('id', { count: 'exact' }),
+      supabase.from('orders').select('id, total_amount, status'),
+    ])
+
+    const totalProducts = productsResult.count ?? 0
+    const totalCategories = categoriesResult.count ?? 0
+    const orders = (ordersResult.data ?? []) as Pick<Order, 'id' | 'total_amount' | 'status'>[]
+    const totalOrders = orders.length
+    const totalRevenue = orders.reduce((sum, order) => sum + Number(order.total_amount), 0)
+    const pendingOrders = orders.filter(order => order.status === 'pending').length
+
+    return {
+      totalProducts,
+      totalCategories,
+      totalOrders,
+      totalRevenue,
+      pendingOrders,
+    }
+  } catch (error) {
+    console.error('Error fetching stats:', error)
+    return {
+      totalProducts: 0,
+      totalCategories: 0,
+      totalOrders: 0,
+      totalRevenue: 0,
+      pendingOrders: 0,
+    }
   }
 }
 
-async function getRecentOrders() {
-  const supabase = await createClient()
-  const { data } = await supabase
-    .from('orders')
-    .select('*')
-    .order('created_at', { ascending: false })
-    .limit(5)
+async function getRecentOrders(): Promise<Order[]> {
+  try {
+    const supabase = await createClient()
+    const { data, error } = await supabase
+      .from('orders')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(5)
 
-  return data || []
+    if (error) {
+      console.error('Error fetching recent orders:', error)
+      return []
+    }
+
+    return (data ?? []) as Order[]
+  } catch (error) {
+    console.error('Error fetching recent orders:', error)
+    return []
+  }
 }
 
 export default async function AdminDashboard() {
+  await requireAdmin()
+  
   const [stats, recentOrders] = await Promise.all([
     getStats(),
     getRecentOrders(),
@@ -102,7 +143,6 @@ export default async function AdminDashboard() {
 
       {/* Quick Stats */}
       <div className="grid gap-4 lg:grid-cols-2">
-        {/* Pending Orders Alert */}
         {stats.pendingOrders > 0 && (
           <div className="rounded-lg border border-yellow-500/50 bg-yellow-500/10 p-6">
             <div className="flex items-center gap-4">
