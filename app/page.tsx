@@ -36,7 +36,7 @@ export default async function HomePage() {
               </p>
             </div>
             <Link
-              href="/categories"
+              href="/todas-las-categorias"
               className="hidden items-center gap-1 text-sm font-medium text-primary hover:underline sm:flex"
             >
               Ver todas <ArrowRight className="h-4 w-4" />
@@ -88,7 +88,7 @@ export default async function HomePage() {
                   Crear Cuenta
                 </Link>
                 <Link
-                  href="/products"
+                  href="/todos-los-productos"
                   className="inline-flex items-center gap-2 rounded-md border border-primary-foreground/30 px-6 py-3 text-sm font-medium hover:bg-primary-foreground/10 transition-colors"
                 >
                   Ver Productos

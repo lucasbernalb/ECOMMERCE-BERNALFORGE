@@ -66,7 +66,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                 Inicio
               </Link>
               <ChevronRight className="h-4 w-4" />
-              <Link href="/categories" className="hover:text-white transition-colors">
+              <Link href="/todas-las-categorias" className="hover:text-white transition-colors">
                 Categorías
               </Link>
               <ChevronRight className="h-4 w-4" />
@@ -127,7 +127,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                       .map((cat) => (
                         <li key={cat.id}>
                           <Link
-                            href={`/categories/${cat.slug}`}
+                            href={`/todas-las-categorias/${cat.slug}`}
                             className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-white hover:bg-white/10 transition-all group"
                           >
                             <span className="h-1.5 w-1.5 rounded-full bg-white group-hover:bg-orange-200 transition-colors" />
@@ -138,7 +138,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                   </ul>
                   <div className="mt-4 pt-4 border-t border-white/20">
                     <Link
-                      href="/categories"
+                      href="/todas-las-categorias"
                       className="flex items-center justify-center gap-2 text-sm font-medium text-white hover:text-orange-100 transition-colors"
                     >
                       Ver todas
@@ -164,14 +164,14 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                 .map((cat) => (
                   <Link
                     key={cat.id}
-                    href={`/categories/${cat.slug}`}
+                    href={`/todas-las-categorias/${cat.slug}`}
                     className="flex-shrink-0 rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium hover:border-primary/50 transition-all"
                   >
                     {cat.name}
                   </Link>
                 ))}
               <Link
-                href="/categories"
+                href="/todas-las-categorias"
                 className="flex-shrink-0 rounded-lg bg-gradient-to-r from-orange-600 to-orange-500 px-4 py-2 text-sm font-semibold text-white"
               >
                 Ver todas →

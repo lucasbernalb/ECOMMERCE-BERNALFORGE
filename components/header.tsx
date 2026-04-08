@@ -229,20 +229,20 @@ export function Header() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start" className="w-56">
                   <DropdownMenuItem asChild>
-                    <Link href="/products" className="flex items-center gap-2">
+                    <Link href="/todos-los-productos" className="flex items-center gap-2">
                       <Package className="h-4 w-4 text-primary" />
                       <span className="font-medium">Todos los Productos</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <Link href="/products?filter=featured" className="flex items-center gap-2">
+                    <Link href="/todos-los-productos?filter=featured" className="flex items-center gap-2">
                       <Star className="h-4 w-4 text-orange-500" />
                       <span>Productos Destacados</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/products?filter=bestseller" className="flex items-center gap-2">
+                    <Link href="/todos-los-productos?filter=bestseller" className="flex items-center gap-2">
                       <Flame className="h-4 w-4 text-orange-500" />
                       <span>Los Más Vendidos</span>
                     </Link>
@@ -264,7 +264,7 @@ export function Header() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start" className="w-64 max-h-[400px] overflow-y-auto">
                   <DropdownMenuItem asChild>
-                    <Link href="/categories" className="flex items-center gap-2">
+                    <Link href="/todas-las-categorias" className="flex items-center gap-2">
                       <Grid3X3 className="h-4 w-4 text-primary" />
                       <span className="font-medium">Ver Todas las Categorías</span>
                     </Link>
@@ -422,7 +422,7 @@ export function Header() {
                   Productos
                 </p>
                 <Link
-                  href="/products"
+                  href="/todos-los-productos"
                   onClick={() => setMobileMenuOpen(false)}
                   className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
                 >
@@ -430,7 +430,7 @@ export function Header() {
                   Todos los Productos
                 </Link>
                 <Link
-                  href="/products?filter=featured"
+                  href="/todos-los-productos?filter=featured"
                   onClick={() => setMobileMenuOpen(false)}
                   className="flex items-center gap-2 rounded-md px-6 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
                 >
@@ -438,7 +438,7 @@ export function Header() {
                   Productos Destacados
                 </Link>
                 <Link
-                  href="/products?filter=bestseller"
+                  href="/todos-los-productos?filter=bestseller"
                   onClick={() => setMobileMenuOpen(false)}
                   className="flex items-center gap-2 rounded-md px-6 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
                 >
@@ -455,7 +455,7 @@ export function Header() {
                   Categorías
                 </p>
                 <Link
-                  href="/categories"
+                  href="/todas-las-categorias"
                   onClick={() => setMobileMenuOpen(false)}
                   className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
                 >
@@ -474,7 +474,7 @@ export function Header() {
                 ))}
                 {categories.length > 4 && (
                   <Link
-                    href="/categories"
+                    href="/todas-las-categorias"
                     onClick={() => setMobileMenuOpen(false)}
                     className="block rounded-md px-6 py-2 text-sm font-medium text-orange-500 hover:text-orange-400 transition-colors"
                   >
