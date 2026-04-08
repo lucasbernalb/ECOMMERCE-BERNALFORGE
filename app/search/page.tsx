@@ -12,7 +12,7 @@ interface SearchPageProps {
 export async function generateMetadata({ searchParams }: SearchPageProps) {
   const { q } = await searchParams
   return {
-    title: q ? `Search: ${q} | BernalForge Tools` : 'Search | BernalForge Tools',
+    title: q ? `Buscar: ${q} | BernalForge Tools` : 'Buscar | BernalForge Tools',
   }
 }
 
@@ -30,10 +30,10 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           <div className="mx-auto max-w-7xl px-4 py-3">
             <nav className="flex items-center gap-2 text-sm text-muted-foreground">
               <Link href="/" className="hover:text-foreground transition-colors">
-                Home
+                Inicio
               </Link>
               <ChevronRight className="h-4 w-4" />
-              <span className="text-foreground font-medium">Search</span>
+              <span className="text-foreground font-medium">Buscar</span>
             </nav>
           </div>
         </div>
@@ -41,10 +41,10 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         <div className="mx-auto max-w-7xl px-4 py-8">
           {/* Search Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold">Search Results</h1>
+            <h1 className="text-3xl font-bold">Resultados de Búsqueda</h1>
             {query && (
               <p className="text-muted-foreground mt-2">
-                {products.length} {products.length === 1 ? 'result' : 'results'} for{' '}
+                {products.length} {products.length === 1 ? 'resultado' : 'resultados'} para{' '}
                 <span className="font-medium text-foreground">&quot;{query}&quot;</span>
               </p>
             )}
@@ -54,23 +54,23 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           {!query ? (
             <div className="text-center py-12">
               <Search className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <p className="text-lg font-medium">Enter a search term</p>
+              <p className="text-lg font-medium">Ingresa un término de búsqueda</p>
               <p className="text-muted-foreground mt-1">
-                Search for tools, brands, or categories
+                Busca herramientas, marcas o categorías
               </p>
             </div>
           ) : products.length === 0 ? (
             <div className="text-center py-12">
               <Search className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <p className="text-lg font-medium">No products found</p>
+              <p className="text-lg font-medium">No se encontraron productos</p>
               <p className="text-muted-foreground mt-1">
-                Try a different search term or browse our categories
+                Intenta con otro término o explora nuestras categorías
               </p>
               <Link
                 href="/"
                 className="inline-flex items-center gap-2 mt-6 rounded-md bg-primary px-6 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
               >
-                Back to Home
+                Volver al Inicio
               </Link>
             </div>
           ) : (

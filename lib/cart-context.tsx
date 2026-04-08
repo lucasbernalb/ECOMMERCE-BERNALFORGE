@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useReducer, useEffect, type ReactNode } from 'react'
+import { createContext, useContext, useReducer, useEffect, useState, type ReactNode } from 'react'
 import type { Product } from './types'
 
 export interface CartItem {
@@ -27,6 +27,7 @@ const CartContext = createContext<{
   dispatch: React.Dispatch<CartAction>
   totalItems: number
   totalPrice: number
+  isHydrated: boolean
   addToCart: (product: Product, quantity?: number) => void
   removeFromCart: (productId: string) => void
   updateQuantity: (productId: string, quantity: number) => void
@@ -38,17 +39,29 @@ const CartContext = createContext<{
 function cartReducer(state: CartState, action: CartAction): CartState {
   switch (action.type) {
     case 'ADD_ITEM': {
+      const quantityToAdd = action.quantity ?? 1
+      console.log('[CART] ADD_ITEM:', { 
+        productId: action.product.id, 
+        quantity: quantityToAdd,
+        currentItems: state.items.length 
+      })
       const existingIndex = state.items.findIndex(
         item => item.product.id === action.product.id
       )
       if (existingIndex >= 0) {
-        const newItems = [...state.items]
-        newItems[existingIndex].quantity += action.quantity || 1
+        // Update existing item - add to existing quantity
+        const newItems = state.items.map((item, index) =>
+          index === existingIndex
+            ? { ...item, quantity: item.quantity + quantityToAdd }
+            : item
+        )
+        console.log('[CART] Updated existing item, new quantity:', newItems[existingIndex].quantity)
         return { ...state, items: newItems }
       }
+      console.log('[CART] Added new item')
       return {
         ...state,
-        items: [...state.items, { product: action.product, quantity: action.quantity || 1 }],
+        items: [...state.items, { product: action.product, quantity: quantityToAdd }],
       }
     }
     case 'REMOVE_ITEM':
@@ -87,6 +100,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(cartReducer, { items: [], isOpen: false })
+  const [isHydrated, setIsHydrated] = useState(false)
 
   // Load cart from localStorage on mount
   useEffect(() => {
@@ -99,6 +113,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         // Invalid cart data
       }
     }
+    setIsHydrated(true)
   }, [])
 
   // Save cart to localStorage on change
@@ -143,6 +158,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         dispatch,
         totalItems,
         totalPrice,
+        isHydrated,
         addToCart,
         removeFromCart,
         updateQuantity,

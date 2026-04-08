@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
-import { ProductCard } from '@/components/product-card'
+import { RelatedProducts } from '@/components/related-products'
 import { ProductDetail } from '@/components/product-detail'
 import { getProductBySlug, getRelatedProducts } from '@/lib/data'
 
@@ -16,12 +16,12 @@ export async function generateMetadata({ params }: ProductPageProps) {
   const product = await getProductBySlug(slug)
   
   if (!product) {
-    return { title: 'Product Not Found' }
+    return { title: 'Producto No Encontrado' }
   }
 
   return {
     title: `${product.name} | BernalForge Tools`,
-    description: product.description || `${product.name} by ${product.brand}`,
+    description: product.description || `${product.name} de ${product.brand}`,
   }
 }
 
@@ -45,13 +45,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <div className="mx-auto max-w-7xl px-4 py-3">
             <nav className="flex items-center gap-2 text-sm text-muted-foreground">
               <Link href="/" className="hover:text-foreground transition-colors">
-                Home
+                Inicio
               </Link>
               <ChevronRight className="h-4 w-4" />
               {product.category && (
                 <>
                   <Link
-                    href={`/category/${product.category.slug}`}
+                    href={`/categories/${product.category.slug}`}
                     className="hover:text-foreground transition-colors"
                   >
                     {product.category.name}
@@ -73,12 +73,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
         {relatedProducts.length > 0 && (
           <section className="border-t border-border bg-muted/30">
             <div className="mx-auto max-w-7xl px-4 py-16">
-              <h2 className="text-2xl font-bold mb-8">Related Products</h2>
-              <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                {relatedProducts.map((relatedProduct) => (
-                  <ProductCard key={relatedProduct.id} product={relatedProduct} />
-                ))}
-              </div>
+              <h2 className="text-2xl font-bold mb-8">Productos Relacionados</h2>
+              <RelatedProducts products={relatedProducts} />
             </div>
           </section>
         )}

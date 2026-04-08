@@ -9,10 +9,12 @@ out/
 build/
 dist/
 
-# env files
+# env files (NUNCA commitear estos)
 .env
 .env.local
 .env.*.local
+.env.production
+.env.development
 
 # misc
 .DS_Store
@@ -29,3 +31,34 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Agent Teams Lite (memoria persistente - no exponés contexto de sesión)
+.atl/
+
+# Herramientas de IA (PUEDEN CONTENER API KEYS - NO COMMITEAR)
+opencode/
+.ai/
+.claude/
+
+# Carpetas de scripts y docs locales
+"Nueva carpeta"/
+scripts/
+docs/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+Thumbs.db
+*.log
+
+# Netlify
+.netlify/
+
+# Carpetas de prueba o migración (no necesitan estar en repo)
+app/home/
+app/categories/
+app/products/

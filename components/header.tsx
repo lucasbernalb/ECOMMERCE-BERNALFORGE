@@ -18,6 +18,10 @@ import {
   Settings,
   Package,
   Shield,
+  ChevronDown,
+  Grid3X3,
+  Star,
+  Flame,
 } from 'lucide-react'
 import { useCart } from '@/lib/cart-context'
 import { CartSheet } from './cart-sheet'
@@ -33,13 +37,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { toast } from 'sonner'
 import type { User as SupabaseUser } from '@supabase/supabase-js'
-
-const categories = [
-  { name: 'Power Tools', href: '/category/power-tools' },
-  { name: 'Hand Tools', href: '/category/hand-tools' },
-  { name: 'Construction', href: '/category/construction-tools' },
-  { name: 'Safety Equipment', href: '/category/safety-equipment' },
-]
+import type { Category } from '@/lib/types'
 
 export function Header() {
   const router = useRouter()
@@ -49,8 +47,26 @@ export function Header() {
   const [user, setUser] = useState<SupabaseUser | null>(null)
   const [isAdmin, setIsAdmin] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [categories, setCategories] = useState<Category[]>([])
+  const [categoriesOpen, setCategoriesOpen] = useState(false)
+  const [productsOpen, setProductsOpen] = useState(false)
   const { theme, setTheme } = useTheme()
   const { totalItems, toggleCart } = useCart()
+
+  // Fetch categories from Supabase
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const supabase = createClient()
+      const { data } = await supabase
+        .from('categories')
+        .select('*')
+        .order('name')
+      if (data) {
+        setCategories(data)
+      }
+    }
+    fetchCategories()
+  }, [])
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -90,14 +106,14 @@ export function Header() {
   const handleSignOut = async () => {
     const supabase = createClient()
     await supabase.auth.signOut()
-    toast.success('Signed out successfully')
+    toast.success('Sesión cerrada exitosamente')
     router.push('/')
   }
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
     if (searchQuery.trim()) {
-      window.location.href = `/search?q=${encodeURIComponent(searchQuery)}`
+      router.push(`/search?q=${encodeURIComponent(searchQuery)}`)
     }
   }
 
@@ -107,7 +123,7 @@ export function Header() {
         {/* Top bar */}
         <div className="hidden border-b border-border bg-muted/50 md:block">
           <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 text-sm">
-            <p className="text-muted-foreground">Free shipping on orders over $99</p>
+            <p className="text-muted-foreground">Envío gratis en pedidos mayores a $99</p>
             <div className="flex items-center gap-4">
               {!isLoading && (
                 <>
@@ -129,17 +145,17 @@ export function Header() {
                         <DropdownMenuSeparator />
                         <DropdownMenuItem asChild>
                           <Link href="/account">
-                            <User className="mr-2 h-4 w-4" /> My Account
+                            <User className="mr-2 h-4 w-4" /> Mi Cuenta
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>
                           <Link href="/account/orders">
-                            <Package className="mr-2 h-4 w-4" /> Orders
+                            <Package className="mr-2 h-4 w-4" /> Mis Pedidos
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>
                           <Link href="/account/settings">
-                            <Settings className="mr-2 h-4 w-4" /> Settings
+                            <Settings className="mr-2 h-4 w-4" /> Configuración
                           </Link>
                         </DropdownMenuItem>
                         {isAdmin && (
@@ -147,7 +163,7 @@ export function Header() {
                             <DropdownMenuSeparator />
                             <DropdownMenuItem asChild>
                               <Link href="/admin">
-                                <Shield className="mr-2 h-4 w-4" /> Admin Panel
+                                <Shield className="mr-2 h-4 w-4" /> Panel de Admin
                               </Link>
                             </DropdownMenuItem>
                           </>
@@ -157,7 +173,7 @@ export function Header() {
                           onClick={handleSignOut}
                           className="text-destructive focus:text-destructive"
                         >
-                          <LogOut className="mr-2 h-4 w-4" /> Sign Out
+                          <LogOut className="mr-2 h-4 w-4" /> Cerrar Sesión
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -167,14 +183,14 @@ export function Header() {
                         href="/auth/login"
                         className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                       >
-                        Sign In
+                        Iniciar Sesión
                       </Link>
                       <span className="text-border">|</span>
                       <Link
                         href="/auth/sign-up"
                         className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                       >
-                        Create Account
+                        Crear Cuenta
                       </Link>
                     </div>
                   )}
@@ -198,16 +214,71 @@ export function Header() {
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-6">
-              {categories.map((category) => (
-                <Link
-                  key={category.href}
-                  href={category.href}
-                  className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  {category.name}
-                </Link>
-              ))}
+            <nav className="hidden lg:flex items-center gap-1">
+              {/* Products Dropdown */}
+              <DropdownMenu open={productsOpen} onOpenChange={setProductsOpen}>
+                <DropdownMenuTrigger asChild>
+                  <button className="flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors">
+                    <Package className="h-4 w-4" />
+                    <span>Productos</span>
+                    <ChevronDown className={cn(
+                      "h-3 w-3 transition-transform duration-200",
+                      productsOpen && "rotate-180"
+                    )} />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-56">
+                  <DropdownMenuItem asChild>
+                    <Link href="/products" className="flex items-center gap-2">
+                      <Package className="h-4 w-4 text-primary" />
+                      <span className="font-medium">Todos los Productos</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link href="/products?filter=featured" className="flex items-center gap-2">
+                      <Star className="h-4 w-4 text-orange-500" />
+                      <span>Productos Destacados</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/products?filter=bestseller" className="flex items-center gap-2">
+                      <Flame className="h-4 w-4 text-orange-500" />
+                      <span>Los Más Vendidos</span>
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              {/* Categories Dropdown */}
+              <DropdownMenu open={categoriesOpen} onOpenChange={setCategoriesOpen}>
+                <DropdownMenuTrigger asChild>
+                  <button className="flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors">
+                    <Grid3X3 className="h-4 w-4" />
+                    <span>Categorías</span>
+                    <ChevronDown className={cn(
+                      "h-3 w-3 transition-transform duration-200",
+                      categoriesOpen && "rotate-180"
+                    )} />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-64 max-h-[400px] overflow-y-auto">
+                  <DropdownMenuItem asChild>
+                    <Link href="/categories" className="flex items-center gap-2">
+                      <Grid3X3 className="h-4 w-4 text-primary" />
+                      <span className="font-medium">Ver Todas las Categorías</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  {categories.map((category) => (
+                    <DropdownMenuItem key={category.id} asChild>
+                      <Link href={`/categories/${category.slug}`}>
+                        {category.name}
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </nav>
 
             {/* Search Bar - Desktop */}
@@ -216,7 +287,7 @@ export function Header() {
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <input
                   type="search"
-                  placeholder="Search tools & equipment..."
+                  placeholder="Buscar herramientas..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full rounded-md border border-input bg-background px-9 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
@@ -264,14 +335,14 @@ export function Header() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem asChild>
-                      <Link href="/account">My Account</Link>
+                      <Link href="/account">Mi Cuenta</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link href="/account/orders">Orders</Link>
+                      <Link href="/account/orders">Mis Pedidos</Link>
                     </DropdownMenuItem>
                     {isAdmin && (
                       <DropdownMenuItem asChild>
-                        <Link href="/admin">Admin Panel</Link>
+                        <Link href="/admin">Panel de Admin</Link>
                       </DropdownMenuItem>
                     )}
                     <DropdownMenuSeparator />
@@ -279,7 +350,7 @@ export function Header() {
                       onClick={handleSignOut}
                       className="text-destructive focus:text-destructive"
                     >
-                      Sign Out
+                      Cerrar Sesión
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -325,7 +396,7 @@ export function Header() {
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <input
                   type="search"
-                  placeholder="Search tools & equipment..."
+                  placeholder="Buscar herramientas..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full rounded-md border border-input bg-background px-9 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
@@ -340,29 +411,87 @@ export function Header() {
         <div
           className={cn(
             'overflow-hidden border-t border-border lg:hidden transition-all duration-200',
-            mobileMenuOpen ? 'max-h-96' : 'max-h-0 border-t-0'
+            mobileMenuOpen ? 'max-h-[500px]' : 'max-h-0 border-t-0'
           )}
         >
           <nav className="mx-auto max-w-7xl px-4 py-4">
-            <div className="flex flex-col gap-2">
-              {categories.map((category) => (
+            <div className="flex flex-col gap-1">
+              {/* Mobile Productos Section */}
+              <div className="px-3 py-2">
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
+                  Productos
+                </p>
                 <Link
-                  key={category.href}
-                  href={category.href}
+                  href="/products"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+                  className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
                 >
-                  {category.name}
+                  <Package className="h-4 w-4 text-primary" />
+                  Todos los Productos
                 </Link>
-              ))}
+                <Link
+                  href="/products?filter=featured"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 rounded-md px-6 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+                >
+                  <Star className="h-4 w-4 text-orange-500" />
+                  Productos Destacados
+                </Link>
+                <Link
+                  href="/products?filter=bestseller"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 rounded-md px-6 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+                >
+                  <Flame className="h-4 w-4 text-orange-500" />
+                  Los Más Vendidos
+                </Link>
+              </div>
+              
               <div className="my-2 border-t border-border" />
+              
+              {/* Mobile Categories Section */}
+              <div className="px-3 py-2">
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
+                  Categorías
+                </p>
+                <Link
+                  href="/categories"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+                >
+                  <Grid3X3 className="h-4 w-4 text-primary" />
+                  Ver Todas las Categorías
+                </Link>
+                {categories.slice(0, 4).map((category) => (
+                  <Link
+                    key={category.id}
+                    href={`/categories/${category.slug}`}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block rounded-md px-6 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+                  >
+                    {category.name}
+                  </Link>
+                ))}
+                {categories.length > 4 && (
+                  <Link
+                    href="/categories"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block rounded-md px-6 py-2 text-sm font-medium text-orange-500 hover:text-orange-400 transition-colors"
+                  >
+                    Ver todas las categorías →
+                  </Link>
+                )}
+              </div>
+              
+              <div className="my-2 border-t border-border" />
+              
               <Link
                 href="/wishlist"
                 onClick={() => setMobileMenuOpen(false)}
                 className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors sm:hidden"
               >
                 <Heart className="h-4 w-4" />
-                Wishlist
+                Favoritos
               </Link>
               {!isLoading && (
                 <>
@@ -374,7 +503,7 @@ export function Header() {
                         className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
                       >
                         <User className="h-4 w-4" />
-                        Account
+                        Mi Cuenta
                       </Link>
                       {isAdmin && (
                         <Link
@@ -383,7 +512,7 @@ export function Header() {
                           className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
                         >
                           <Shield className="h-4 w-4" />
-                          Admin Panel
+                          Panel de Admin
                         </Link>
                       )}
                       <button
@@ -394,7 +523,7 @@ export function Header() {
                         className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
                       >
                         <LogOut className="h-4 w-4" />
-                        Sign Out
+                        Cerrar Sesión
                       </button>
                     </>
                   ) : (
@@ -403,7 +532,7 @@ export function Header() {
                       onClick={() => setMobileMenuOpen(false)}
                       className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors md:hidden"
                     >
-                      Sign In
+                      Iniciar Sesión
                     </Link>
                   )}
                 </>

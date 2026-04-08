@@ -69,12 +69,12 @@ export default function WishlistPage() {
       .eq('product_id', productId)
 
     if (error) {
-      toast.error('Failed to remove from wishlist')
+      toast.error('Error al eliminar de favoritos')
       return
     }
 
     setWishlistItems((prev) => prev.filter((item) => item.id !== productId))
-    toast.success('Removed from wishlist')
+    toast.success('Eliminado de favoritos')
   }
 
   return (
@@ -87,54 +87,54 @@ export default function WishlistPage() {
           <div className="mx-auto max-w-7xl px-4 py-3">
             <nav className="flex items-center gap-2 text-sm text-muted-foreground">
               <Link href="/" className="hover:text-foreground transition-colors">
-                Home
+                Inicio
               </Link>
               <ChevronRight className="h-4 w-4" />
-              <span className="text-foreground font-medium">Wishlist</span>
+              <span className="text-foreground font-medium">Favoritos</span>
             </nav>
           </div>
         </div>
 
         <div className="mx-auto max-w-7xl px-4 py-8">
-          <h1 className="text-3xl font-bold mb-8">My Wishlist</h1>
+          <h1 className="text-3xl font-bold mb-8">Mis Favoritos</h1>
 
           {isLoading ? (
             <div className="text-center py-12">
               <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent" />
-              <p className="text-muted-foreground mt-4">Loading wishlist...</p>
+              <p className="text-muted-foreground mt-4">Cargando favoritos...</p>
             </div>
           ) : !isAuthenticated ? (
             <div className="text-center py-12">
               <LogIn className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-              <h2 className="text-xl font-semibold">Sign in to view your wishlist</h2>
+              <h2 className="text-xl font-semibold">Iniciá sesión para ver tus favoritos</h2>
               <p className="text-muted-foreground mt-2">
-                Create an account or sign in to save your favorite tools
+                Creá una cuenta o iniciá sesión para guardar tus herramientas favoritas
               </p>
               <Link
                 href="/auth/login"
                 className="inline-flex items-center gap-2 mt-6 rounded-md bg-primary px-6 py-3 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
               >
-                Sign In
+                Iniciar Sesión
               </Link>
             </div>
           ) : wishlistItems.length === 0 ? (
             <div className="text-center py-12">
               <Heart className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-              <h2 className="text-xl font-semibold">Your wishlist is empty</h2>
+              <h2 className="text-xl font-semibold">Tu lista de favoritos está vacía</h2>
               <p className="text-muted-foreground mt-2">
-                Start adding tools you love to your wishlist
+                Empezá a agregar herramientas que te gusten a tus favoritos
               </p>
               <Link
                 href="/"
                 className="inline-flex items-center gap-2 mt-6 rounded-md bg-primary px-6 py-3 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
               >
-                Browse Products
+                Ver Productos
               </Link>
             </div>
           ) : (
             <>
               <p className="text-muted-foreground mb-6">
-                {wishlistItems.length} {wishlistItems.length === 1 ? 'item' : 'items'} saved
+                {wishlistItems.length} {wishlistItems.length === 1 ? 'producto' : 'productos'} guardados
               </p>
               <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 {wishlistItems.map((product) => (

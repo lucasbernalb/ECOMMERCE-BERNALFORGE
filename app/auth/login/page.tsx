@@ -30,11 +30,11 @@ export default function LoginPage() {
         return
       }
 
-      toast.success('Signed in successfully')
+      toast.success('Sesión iniciada exitosamente')
       router.push('/account')
       router.refresh()
     } catch {
-      toast.error('An error occurred. Please try again.')
+      toast.error('Ocurrió un error. Por favor, intentá de nuevo.')
     } finally {
       setIsLoading(false)
     }
@@ -53,15 +53,15 @@ export default function LoginPage() {
 
         {/* Card */}
         <div className="rounded-lg border border-border bg-card p-8">
-          <h1 className="text-2xl font-bold text-center mb-2">Welcome Back</h1>
+          <h1 className="text-2xl font-bold text-center mb-2">¡Bienvenido!</h1>
           <p className="text-muted-foreground text-center mb-6">
-            Sign in to your account to continue
+            Iniciá sesión para continuar
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm font-medium mb-2">
-                Email
+                Correo Electrónico
               </label>
               <input
                 type="email"
@@ -70,13 +70,13 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 className="w-full rounded-md border border-input bg-background px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                placeholder="you@example.com"
+                placeholder="tu@email.com"
               />
             </div>
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium mb-2">
-                Password
+                Contraseña
               </label>
               <div className="relative">
                 <input
@@ -86,7 +86,7 @@ export default function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   className="w-full rounded-md border border-input bg-background px-4 py-2 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                  placeholder="Enter your password"
+                  placeholder="Ingresá tu contraseña"
                 />
                 <button
                   type="button"
@@ -103,20 +103,20 @@ export default function LoginPage() {
               disabled={isLoading}
               className="w-full rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              {isLoading ? 'Signing in...' : 'Sign In'}
+              {isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
             </button>
           </form>
 
           <div className="mt-6 text-center text-sm">
-            <span className="text-muted-foreground">Don&apos;t have an account? </span>
+            <span className="text-muted-foreground">¿No tenés cuenta? </span>
             <Link href="/auth/sign-up" className="text-primary hover:underline">
-              Sign up
+              Crear Cuenta
             </Link>
           </div>
         </div>
 
         <p className="text-center text-xs text-muted-foreground mt-4">
-          By signing in, you agree to our Terms of Service and Privacy Policy.
+          Al iniciar sesión, aceptás nuestros Términos de Servicio y Política de Privacidad.
         </p>
       </div>
     </div>

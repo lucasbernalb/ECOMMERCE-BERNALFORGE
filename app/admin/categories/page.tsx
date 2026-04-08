@@ -31,9 +31,9 @@ export default async function AdminCategoriesPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Categories</h1>
+        <h1 className="text-3xl font-bold">Categorías</h1>
         <p className="text-muted-foreground mt-1">
-          Manage product categories
+          Gestioná las categorías de tus productos
         </p>
       </div>
 
@@ -42,9 +42,9 @@ export default async function AdminCategoriesPage() {
           {categories.length === 0 ? (
             <div className="p-12 text-center">
               <FolderOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <p className="text-lg font-medium">No categories yet</p>
+              <p className="text-lg font-medium">No hay categorías todavía</p>
               <p className="text-muted-foreground mt-1">
-                Categories help organize your products
+                Las categorías ayudan a organizar tus productos
               </p>
             </div>
           ) : (
@@ -52,16 +52,16 @@ export default async function AdminCategoriesPage() {
               <thead>
                 <tr className="border-b border-border bg-muted/50">
                   <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                    Category
+                    Categoría
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                     Slug
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                    Description
+                    Descripción
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                    Created
+                    Creado
                   </th>
                 </tr>
               </thead>
@@ -98,7 +98,7 @@ export default async function AdminCategoriesPage() {
                       </p>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
-                      {new Date(category.created_at).toLocaleDateString()}
+                      {new Date(category.created_at).toLocaleDateString('es-AR')}
                     </td>
                   </tr>
                 ))}

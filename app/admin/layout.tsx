@@ -9,12 +9,12 @@ import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
 
 const navItems = [
-  { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
-  { name: 'Products', href: '/admin/products', icon: Package },
-  { name: 'Categories', href: '/admin/categories', icon: FolderOpen },
-  { name: 'Orders', href: '/admin/orders', icon: ShoppingCart },
-  { name: 'Customers', href: '/admin/customers', icon: Users },
-  { name: 'Settings', href: '/admin/settings', icon: Settings },
+  { name: 'Panel', href: '/admin', icon: LayoutDashboard },
+  { name: 'Productos', href: '/admin/products', icon: Package },
+  { name: 'Categorías', href: '/admin/categories', icon: FolderOpen },
+  { name: 'Pedidos', href: '/admin/orders', icon: ShoppingCart },
+  { name: 'Clientes', href: '/admin/customers', icon: Users },
+  { name: 'Configuración', href: '/admin/settings', icon: Settings },
 ]
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -40,7 +40,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         .single()
 
       if (!profile?.is_admin) {
-        toast.error('Access denied. Admin privileges required.')
+        toast.error('Acceso denegado. Se requieren privilegios de administrador.')
         router.push('/')
         return
       }
@@ -94,7 +94,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <button
               onClick={() => setSidebarOpen(false)}
               className="lg:hidden"
-              aria-label="Close sidebar"
+              aria-label="Cerrar menú"
             >
               <X className="h-5 w-5" />
             </button>
@@ -134,14 +134,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors mb-1"
             >
               <Hammer className="h-4 w-4" />
-              View Store
+              Ver Tienda
             </Link>
             <button
               onClick={handleSignOut}
               className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
             >
               <LogOut className="h-4 w-4" />
-              Sign Out
+              Cerrar Sesión
             </button>
           </div>
         </div>
@@ -154,7 +154,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <button
             onClick={() => setSidebarOpen(true)}
             className="lg:hidden"
-            aria-label="Open sidebar"
+            aria-label="Abrir menú"
           >
             <Menu className="h-5 w-5" />
           </button>

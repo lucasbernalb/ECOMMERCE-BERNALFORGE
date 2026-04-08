@@ -9,7 +9,7 @@ interface CategoryCardProps {
 
 export function CategoryCard({ category }: CategoryCardProps) {
   return (
-    <Link href={`/category/${category.slug}`} className="group">
+    <Link href={`/categories/${category.slug}`} className="group">
       <div className="relative overflow-hidden rounded-lg border border-border bg-card transition-all hover:border-primary/50 hover:shadow-md">
         <div className="relative aspect-[4/3] bg-muted">
           {category.image_url ? (
@@ -36,7 +36,7 @@ export function CategoryCard({ category }: CategoryCardProps) {
             </p>
           )}
           <div className="flex items-center gap-1 text-sm font-medium text-primary mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
-            Shop Now <ArrowRight className="h-4 w-4" />
+            Ver productos <ArrowRight className="h-4 w-4" />
           </div>
         </div>
       </div>

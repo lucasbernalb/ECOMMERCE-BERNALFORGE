@@ -3,22 +3,22 @@ import { Hammer, Mail, Phone, MapPin } from 'lucide-react'
 
 const footerLinks = {
   shop: [
-    { name: 'Power Tools', href: '/category/power-tools' },
-    { name: 'Hand Tools', href: '/category/hand-tools' },
-    { name: 'Construction Tools', href: '/category/construction-tools' },
-    { name: 'Safety Equipment', href: '/category/safety-equipment' },
+    { name: 'Herramientas Eléctricas', href: '/categories/power-tools' },
+    { name: 'Herramientas Manuales', href: '/categories/hand-tools' },
+    { name: 'Herramientas de Construcción', href: '/categories/construction-tools' },
+    { name: 'Equipo de Seguridad', href: '/categories/safety-equipment' },
   ],
   support: [
-    { name: 'Contact Us', href: '/contact' },
-    { name: 'FAQs', href: '/faq' },
-    { name: 'Shipping Info', href: '/shipping' },
-    { name: 'Returns', href: '/returns' },
+    { name: 'Contáctanos', href: '/contact' },
+    { name: 'Preguntas Frecuentes', href: '/faq' },
+    { name: 'Info de Envíos', href: '/shipping' },
+    { name: 'Devoluciones', href: '/returns' },
   ],
   company: [
-    { name: 'About Us', href: '/about' },
-    { name: 'Careers', href: '/careers' },
-    { name: 'Privacy Policy', href: '/privacy' },
-    { name: 'Terms of Service', href: '/terms' },
+    { name: 'Sobre Nosotros', href: '/about' },
+    { name: 'Trabaja con Nosotros', href: '/careers' },
+    { name: 'Política de Privacidad', href: '/privacy' },
+    { name: 'Términos de Servicio', href: '/terms' },
   ],
 }
 
@@ -36,7 +36,7 @@ export function Footer() {
               <span className="text-xl font-bold tracking-tight">BernalForge</span>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-              Professional-grade tools and equipment for contractors, builders, and serious DIYers.
+              Herramientas y equipos de grado profesional para contratistas, constructores y entusiastas del DIY.
             </p>
             <div className="flex flex-col gap-2 text-sm text-muted-foreground">
               <a href="tel:1-800-FORGE-00" className="flex items-center gap-2 hover:text-foreground transition-colors">
@@ -56,7 +56,7 @@ export function Footer() {
 
           {/* Shop */}
           <div>
-            <h3 className="text-sm font-semibold mb-4">Shop</h3>
+            <h3 className="text-sm font-semibold mb-4">Tienda</h3>
             <ul className="flex flex-col gap-2">
               {footerLinks.shop.map((link) => (
                 <li key={link.href}>
@@ -73,7 +73,7 @@ export function Footer() {
 
           {/* Support */}
           <div>
-            <h3 className="text-sm font-semibold mb-4">Support</h3>
+            <h3 className="text-sm font-semibold mb-4">Soporte</h3>
             <ul className="flex flex-col gap-2">
               {footerLinks.support.map((link) => (
                 <li key={link.href}>
@@ -90,7 +90,7 @@ export function Footer() {
 
           {/* Company */}
           <div>
-            <h3 className="text-sm font-semibold mb-4">Company</h3>
+            <h3 className="text-sm font-semibold mb-4">Empresa</h3>
             <ul className="flex flex-col gap-2">
               {footerLinks.company.map((link) => (
                 <li key={link.href}>
@@ -109,7 +109,7 @@ export function Footer() {
         {/* Bottom */}
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 sm:flex-row">
           <p className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} BernalForge Tools. All rights reserved.
+            &copy; {new Date().getFullYear()} BernalForge Tools. Todos los derechos reservados.
           </p>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 text-xs text-muted-foreground">

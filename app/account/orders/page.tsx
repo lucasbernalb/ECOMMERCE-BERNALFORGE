@@ -10,6 +10,14 @@ import { createClient } from '@/lib/supabase/client'
 import type { Order } from '@/lib/types'
 import { cn } from '@/lib/utils'
 
+const statusLabels: Record<string, string> = {
+  pending: 'Pendiente',
+  processing: 'Procesando',
+  shipped: 'Enviado',
+  delivered: 'Entregado',
+  cancelled: 'Cancelado',
+}
+
 const statusColors: Record<string, string> = {
   pending: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400',
   processing: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',
@@ -62,38 +70,38 @@ export default function OrdersPage() {
           <div className="mx-auto max-w-7xl px-4 py-3">
             <nav className="flex items-center gap-2 text-sm text-muted-foreground">
               <Link href="/" className="hover:text-foreground transition-colors">
-                Home
+                Inicio
               </Link>
               <ChevronRight className="h-4 w-4" />
               <Link href="/account" className="hover:text-foreground transition-colors">
-                Account
+                Cuenta
               </Link>
               <ChevronRight className="h-4 w-4" />
-              <span className="text-foreground font-medium">Orders</span>
+              <span className="text-foreground font-medium">Pedidos</span>
             </nav>
           </div>
         </div>
 
         <div className="mx-auto max-w-7xl px-4 py-8">
-          <h1 className="text-3xl font-bold mb-8">Order History</h1>
+          <h1 className="text-3xl font-bold mb-8">Historial de Pedidos</h1>
 
           {isLoading ? (
             <div className="text-center py-12">
               <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent" />
-              <p className="text-muted-foreground mt-4">Loading orders...</p>
+              <p className="text-muted-foreground mt-4">Cargando pedidos...</p>
             </div>
           ) : orders.length === 0 ? (
             <div className="text-center py-12">
               <Package className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-              <h2 className="text-xl font-semibold">No orders yet</h2>
+              <h2 className="text-xl font-semibold">Aún no tienes pedidos</h2>
               <p className="text-muted-foreground mt-2">
-                When you place an order, it will appear here
+                Cuando realices un pedido, aparecerá aquí
               </p>
               <Link
                 href="/"
                 className="inline-flex items-center gap-2 mt-6 rounded-md bg-primary px-6 py-3 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
               >
-                Start Shopping
+                Empezar a Comprar
               </Link>
             </div>
           ) : (
@@ -105,15 +113,15 @@ export default function OrdersPage() {
                 >
                   <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
                     <div>
-                      <p className="text-sm text-muted-foreground">Order</p>
+                      <p className="text-sm text-muted-foreground">Pedido</p>
                       <p className="font-mono font-semibold">
                         {order.id.slice(0, 8).toUpperCase()}
                       </p>
                     </div>
                     <div>
-                      <p className="text-sm text-muted-foreground">Date</p>
+                      <p className="text-sm text-muted-foreground">Fecha</p>
                       <p className="font-medium">
-                        {new Date(order.created_at).toLocaleDateString()}
+                        {new Date(order.created_at).toLocaleDateString('es-ES')}
                       </p>
                     </div>
                     <div>
@@ -121,20 +129,20 @@ export default function OrdersPage() {
                       <p className="font-semibold">${Number(order.total_amount).toFixed(2)}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-muted-foreground mb-1">Status</p>
+                      <p className="text-sm text-muted-foreground mb-1">Estado</p>
                       <span
                         className={cn(
                           'inline-flex rounded-full px-3 py-1 text-xs font-medium capitalize',
                           statusColors[order.status] || statusColors.pending
                         )}
                       >
-                        {order.status}
+                        {statusLabels[order.status] || order.status}
                       </span>
                     </div>
                   </div>
                   <div className="border-t border-border pt-4">
                     <p className="text-sm text-muted-foreground">
-                      Shipping to: {order.shipping_address}, {order.shipping_city} {order.postal_code}
+                      Envío a: {order.shipping_address}, {order.shipping_city} {order.postal_code}
                     </p>
                   </div>
                 </div>

@@ -12,13 +12,13 @@ export default function NotFound() {
           </div>
         </div>
         <h1 className="text-6xl font-bold tracking-tight">404</h1>
-        <h2 className="text-2xl font-semibold">Page Not Found</h2>
+        <h2 className="text-2xl font-semibold">Página No Encontrada</h2>
         <p className="text-muted-foreground max-w-md">
-          The page you&apos;re looking for doesn&apos;t exist or has been moved.
+          La página que estás buscando no existe o fue movida.
         </p>
         <Button asChild className="mt-4">
           <Link href="/">
-            Return Home
+            Volver al Inicio
           </Link>
         </Button>
       </div>

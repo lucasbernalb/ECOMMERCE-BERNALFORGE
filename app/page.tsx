@@ -4,10 +4,14 @@ import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { HeroSection } from '@/components/hero-section'
 import { CategoryCard } from '@/components/category-card'
-import { ProductCard } from '@/components/product-card'
+import { ProductSection } from '@/components/product-section'
 import { getCategories, getFeaturedProducts, getBestSellers } from '@/lib/data'
+import { createClient } from '@/lib/supabase/server'
 
 export default async function HomePage() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
   const [categories, featuredProducts, bestSellers] = await Promise.all([
     getCategories(),
     getFeaturedProducts(8),
@@ -26,16 +30,16 @@ export default async function HomePage() {
         <section className="mx-auto max-w-7xl px-4 py-16">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="text-2xl font-bold">Shop by Category</h2>
+              <h2 className="text-2xl font-bold">Explora por Categoría</h2>
               <p className="text-muted-foreground mt-1">
-                Find the right tools for every job
+                Encuentra las herramientas perfectas para cada trabajo
               </p>
             </div>
             <Link
               href="/categories"
               className="hidden items-center gap-1 text-sm font-medium text-primary hover:underline sm:flex"
             >
-              View All <ArrowRight className="h-4 w-4" />
+              Ver todas <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -48,75 +52,51 @@ export default async function HomePage() {
         {/* Featured Products */}
         <section className="bg-secondary/30 py-16">
           <div className="mx-auto max-w-7xl px-4">
-            <div className="flex items-center justify-between mb-8">
-              <div>
-                <h2 className="text-2xl font-bold">Featured Products</h2>
-                <p className="text-muted-foreground mt-1">
-                  Hand-picked professional tools
-                </p>
-              </div>
-              <Link
-                href="/products?filter=featured"
-                className="hidden items-center gap-1 text-sm font-medium text-primary hover:underline sm:flex"
-              >
-                View All <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-              {featuredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
+            <ProductSection
+              title="Productos Destacados"
+              description="Herramientas profesionales seleccionadas"
+              products={featuredProducts}
+              viewAllHref="/products?filter=featured"
+            />
           </div>
         </section>
 
         {/* Best Sellers */}
         <section className="mx-auto max-w-7xl px-4 py-16">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h2 className="text-2xl font-bold">Best Sellers</h2>
-              <p className="text-muted-foreground mt-1">
-                Top picks from our customers
-              </p>
-            </div>
-            <Link
-              href="/products?filter=bestseller"
-              className="hidden items-center gap-1 text-sm font-medium text-primary hover:underline sm:flex"
-            >
-              View All <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {bestSellers.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
+          <ProductSection
+            title="Los Más Vendidos"
+            description="Las preferidas de nuestros clientes"
+            products={bestSellers}
+            viewAllHref="/products?filter=bestseller"
+          />
         </section>
 
-        {/* CTA Section */}
-        <section className="bg-primary text-primary-foreground">
-          <div className="mx-auto max-w-7xl px-4 py-16 text-center">
-            <h2 className="text-3xl font-bold">Ready to Get Started?</h2>
-            <p className="mt-4 text-primary-foreground/80 max-w-2xl mx-auto">
-              Join thousands of professionals who trust BernalForge for their tools and equipment.
-              Sign up today and get 10% off your first order.
-            </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-4">
-              <Link
-                href="/auth/sign-up"
-                className="inline-flex items-center gap-2 rounded-md bg-background px-6 py-3 text-sm font-medium text-foreground hover:bg-background/90 transition-colors"
-              >
-                Create Account
-              </Link>
-              <Link
-                href="/category/power-tools"
-                className="inline-flex items-center gap-2 rounded-md border border-primary-foreground/30 px-6 py-3 text-sm font-medium hover:bg-primary-foreground/10 transition-colors"
-              >
-                Browse Products
-              </Link>
+        {/* CTA Section - Solo para usuarios no logueados */}
+        {!user && (
+          <section className="bg-primary text-primary-foreground">
+            <div className="mx-auto max-w-7xl px-4 py-16 text-center">
+              <h2 className="text-3xl font-bold">¿Listo para comenzar?</h2>
+              <p className="mt-4 text-primary-foreground/80 max-w-2xl mx-auto">
+                Únete a miles de profesionales que confían en BernalForge para sus herramientas.
+                Regístrate hoy y obtén 10% de descuento en tu primer pedido.
+              </p>
+              <div className="mt-8 flex flex-wrap justify-center gap-4">
+                <Link
+                  href="/auth/sign-up"
+                  className="inline-flex items-center gap-2 rounded-md bg-background px-6 py-3 text-sm font-medium text-foreground hover:bg-background/90 transition-colors"
+                >
+                  Crear Cuenta
+                </Link>
+                <Link
+                  href="/products"
+                  className="inline-flex items-center gap-2 rounded-md border border-primary-foreground/30 px-6 py-3 text-sm font-medium hover:bg-primary-foreground/10 transition-colors"
+                >
+                  Ver Productos
+                </Link>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
       </main>
 
       <Footer />

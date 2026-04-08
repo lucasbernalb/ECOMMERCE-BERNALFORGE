@@ -45,7 +45,7 @@ export interface Order {
   postal_code: string
   total_amount: number
   status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
-  payment_method: 'mercadopago' | 'whatsapp' | 'email'
+  payment_method: 'card' | 'paypal'
   created_at: string
   updated_at: string
   order_items?: OrderItem[]

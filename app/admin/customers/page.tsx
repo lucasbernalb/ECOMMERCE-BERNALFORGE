@@ -30,9 +30,9 @@ export default async function AdminCustomersPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Customers</h1>
+        <h1 className="text-3xl font-bold">Clientes</h1>
         <p className="text-muted-foreground mt-1">
-          View registered customers
+          Ver clientes registrados
         </p>
       </div>
 
@@ -41,9 +41,9 @@ export default async function AdminCustomersPage() {
           {customers.length === 0 ? (
             <div className="p-12 text-center">
               <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <p className="text-lg font-medium">No customers yet</p>
+              <p className="text-lg font-medium">No hay clientes todavía</p>
               <p className="text-muted-foreground mt-1">
-                Registered customers will appear here
+                Los clientes registrados aparecerán aquí
               </p>
             </div>
           ) : (
@@ -54,10 +54,10 @@ export default async function AdminCustomersPage() {
                     Email
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                    Role
+                    Rol
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                    Joined
+                    Registrado
                   </th>
                 </tr>
               </thead>
@@ -70,16 +70,16 @@ export default async function AdminCustomersPage() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       {customer.is_admin ? (
                         <span className="inline-flex rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-                          Admin
+                          Administrador
                         </span>
                       ) : (
                         <span className="inline-flex rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
-                          Customer
+                          Cliente
                         </span>
                       )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
-                      {new Date(customer.created_at).toLocaleDateString()}
+                      {new Date(customer.created_at).toLocaleDateString('es-AR')}
                     </td>
                   </tr>
                 ))}

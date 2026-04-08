@@ -37,7 +37,7 @@ export function ProductForm({ categories, action }: ProductFormProps) {
 
   useEffect(() => {
     if (state.success) {
-      toast.success("Product created successfully")
+      toast.success("Producto creado exitosamente")
       router.push("/admin/products")
       router.refresh()
     } else if (state.error) {
@@ -62,11 +62,11 @@ export function ProductForm({ categories, action }: ProductFormProps) {
     <form action={formAction} className="space-y-6">
       <div className="space-y-4">
         <div className="grid gap-2">
-          <Label htmlFor="name">Name *</Label>
+          <Label htmlFor="name">Nombre *</Label>
           <Input
             id="name"
             name="name"
-            placeholder="Professional Drill Driver"
+            placeholder="Taladro Percutor Profesional"
             required
             onChange={handleNameChange}
           />
@@ -77,17 +77,17 @@ export function ProductForm({ categories, action }: ProductFormProps) {
           <Input
             id="slug"
             name="slug"
-            placeholder="professional-drill-driver"
+            placeholder="taladro-percutor-profesional"
             required
             onChange={handleSlugChange}
           />
           <p className="text-xs text-muted-foreground">
-            URL-friendly identifier. Auto-generated from name if left empty.
+            Identificador amigable para URLs. Se genera automáticamente del nombre si se deja vacío.
           </p>
         </div>
 
         <div className="grid gap-2">
-          <Label htmlFor="brand">Brand *</Label>
+          <Label htmlFor="brand">Marca *</Label>
           <Input
             id="brand"
             name="brand"
@@ -98,7 +98,7 @@ export function ProductForm({ categories, action }: ProductFormProps) {
 
         <div className="grid grid-cols-2 gap-4">
           <div className="grid gap-2">
-            <Label htmlFor="price">Price ($) *</Label>
+            <Label htmlFor="price">Precio ($) *</Label>
             <Input
               id="price"
               name="price"
@@ -125,10 +125,10 @@ export function ProductForm({ categories, action }: ProductFormProps) {
         </div>
 
         <div className="grid gap-2">
-          <Label htmlFor="category_id">Category</Label>
+          <Label htmlFor="category_id">Categoría</Label>
           <Select name="category_id">
             <SelectTrigger>
-              <SelectValue placeholder="Select a category" />
+              <SelectValue placeholder="Seleccionar una categoría" />
             </SelectTrigger>
             <SelectContent>
               {categories.map((category) => (
@@ -141,11 +141,11 @@ export function ProductForm({ categories, action }: ProductFormProps) {
         </div>
 
         <div className="grid gap-2">
-          <Label htmlFor="description">Description</Label>
+          <Label htmlFor="description">Descripción</Label>
           <Textarea
             id="description"
             name="description"
-            placeholder="Product description..."
+            placeholder="Descripción del producto..."
             rows={4}
           />
         </div>
@@ -167,10 +167,10 @@ export function ProductForm({ categories, action }: ProductFormProps) {
               htmlFor="featured"
               className="text-sm font-medium cursor-pointer"
             >
-              Featured
+              Destacado
             </Label>
             <p className="text-xs text-muted-foreground">
-              Show this product in the featured section on the homepage
+              Mostrar este producto en la sección destacada de la página principal
             </p>
           </div>
           <input type="hidden" id="featured" name="featured" value="false" />
@@ -193,10 +193,10 @@ export function ProductForm({ categories, action }: ProductFormProps) {
               htmlFor="best_seller"
               className="text-sm font-medium cursor-pointer"
             >
-              Best Seller
+              Más Vendido
             </Label>
             <p className="text-xs text-muted-foreground">
-              Show this product in the best sellers section
+              Mostrar este producto en la sección de más vendidos
             </p>
           </div>
           <input type="hidden" id="best_seller" name="best_seller" value="false" />
@@ -227,10 +227,10 @@ export function ProductForm({ categories, action }: ProductFormProps) {
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                 />
               </svg>
-              Creating...
+              Creando...
             </>
           ) : (
-            "Create Product"
+            "Crear Producto"
           )}
         </Button>
         <Button
@@ -239,7 +239,7 @@ export function ProductForm({ categories, action }: ProductFormProps) {
           onClick={() => router.push("/admin/products")}
           disabled={isPending}
         >
-          Cancel
+          Cancelar
         </Button>
       </div>
     </form>

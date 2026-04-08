@@ -16,6 +16,34 @@ export async function getCategories(): Promise<Category[]> {
   return data || []
 }
 
+export async function getProductsByCategories(): Promise<Record<string, ProductWithCategory[]>> {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('products')
+    .select(`
+      *,
+      category:categories(*)
+    `)
+    .order('created_at', { ascending: false })
+
+  if (error) {
+    console.error('Error fetching products:', error)
+    return {}
+  }
+
+  // Group by category_id
+  const grouped: Record<string, ProductWithCategory[]> = {}
+  for (const product of data || []) {
+    const catId = product.category_id || 'uncategorized'
+    if (!grouped[catId]) {
+      grouped[catId] = []
+    }
+    grouped[catId].push(product)
+  }
+
+  return grouped
+}
+
 export async function getCategoryBySlug(slug: string): Promise<Category | null> {
   const supabase = await createClient()
   const { data, error } = await supabase

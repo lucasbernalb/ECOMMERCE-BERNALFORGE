@@ -42,7 +42,7 @@ export default function AccountPage() {
   const handleSignOut = async () => {
     const supabase = createClient()
     await supabase.auth.signOut()
-    toast.success('Signed out successfully')
+    toast.success('Sesión cerrada exitosamente')
     router.push('/')
   }
 
@@ -72,16 +72,16 @@ export default function AccountPage() {
           <div className="mx-auto max-w-7xl px-4 py-3">
             <nav className="flex items-center gap-2 text-sm text-muted-foreground">
               <Link href="/" className="hover:text-foreground transition-colors">
-                Home
+                Inicio
               </Link>
               <ChevronRight className="h-4 w-4" />
-              <span className="text-foreground font-medium">Account</span>
+              <span className="text-foreground font-medium">Mi Cuenta</span>
             </nav>
           </div>
         </div>
 
         <div className="mx-auto max-w-7xl px-4 py-8">
-          <h1 className="text-3xl font-bold mb-8">My Account</h1>
+          <h1 className="text-3xl font-bold mb-8">Mi Cuenta</h1>
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {/* Profile Card */}
@@ -93,7 +93,7 @@ export default function AccountPage() {
                 <div>
                   <p className="font-semibold">{user.email}</p>
                   <p className="text-sm text-muted-foreground">
-                    Member since {new Date(user.created_at).toLocaleDateString()}
+                    Miembro desde {new Date(user.created_at).toLocaleDateString('es-AR')}
                   </p>
                 </div>
               </div>
@@ -101,7 +101,7 @@ export default function AccountPage() {
                 href="/account/settings"
                 className="text-sm text-primary hover:underline"
               >
-                Edit Profile
+                Editar Perfil
               </Link>
             </div>
 
@@ -115,9 +115,9 @@ export default function AccountPage() {
                   <Package className="h-6 w-6 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-semibold">Orders</h3>
+                  <h3 className="font-semibold">Mis Pedidos</h3>
                   <p className="text-sm text-muted-foreground">
-                    View your order history
+                    Ver historial de pedidos
                   </p>
                 </div>
               </div>
@@ -133,9 +133,9 @@ export default function AccountPage() {
                   <Heart className="h-6 w-6 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-semibold">Wishlist</h3>
+                  <h3 className="font-semibold">Favoritos</h3>
                   <p className="text-sm text-muted-foreground">
-                    Items you&apos;ve saved
+                    Productos guardados
                   </p>
                 </div>
               </div>
@@ -151,9 +151,9 @@ export default function AccountPage() {
                   <Settings className="h-6 w-6 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-semibold">Settings</h3>
+                  <h3 className="font-semibold">Configuración</h3>
                   <p className="text-sm text-muted-foreground">
-                    Manage account settings
+                    Gestionar configuración de la cuenta
                   </p>
                 </div>
               </div>
@@ -170,9 +170,9 @@ export default function AccountPage() {
                     <Shield className="h-6 w-6 text-primary" />
                   </div>
                   <div>
-                    <h3 className="font-semibold">Admin Panel</h3>
+                    <h3 className="font-semibold">Panel de Admin</h3>
                     <p className="text-sm text-muted-foreground">
-                      Manage products and orders
+                      Gestionar productos y pedidos
                     </p>
                   </div>
                 </div>
@@ -189,9 +189,9 @@ export default function AccountPage() {
                   <LogOut className="h-6 w-6 text-destructive" />
                 </div>
                 <div>
-                  <h3 className="font-semibold">Sign Out</h3>
+                  <h3 className="font-semibold">Cerrar Sesión</h3>
                   <p className="text-sm text-muted-foreground">
-                    Log out of your account
+                    Desconectar de tu cuenta
                   </p>
                 </div>
               </div>

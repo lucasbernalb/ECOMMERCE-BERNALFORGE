@@ -19,12 +19,12 @@ export default function SignUpPage() {
     e.preventDefault()
 
     if (password !== confirmPassword) {
-      toast.error('Passwords do not match')
+      toast.error('Las contraseñas no coinciden')
       return
     }
 
     if (password.length < 6) {
-      toast.error('Password must be at least 6 characters')
+      toast.error('La contraseña debe tener al menos 6 caracteres')
       return
     }
 
@@ -48,7 +48,7 @@ export default function SignUpPage() {
 
       router.push('/auth/sign-up-success')
     } catch {
-      toast.error('An error occurred. Please try again.')
+      toast.error('Ocurrió un error. Por favor, intentá de nuevo.')
     } finally {
       setIsLoading(false)
     }
@@ -67,15 +67,15 @@ export default function SignUpPage() {
 
         {/* Card */}
         <div className="rounded-lg border border-border bg-card p-8">
-          <h1 className="text-2xl font-bold text-center mb-2">Create Account</h1>
+          <h1 className="text-2xl font-bold text-center mb-2">Crear Cuenta</h1>
           <p className="text-muted-foreground text-center mb-6">
-            Join BernalForge to access exclusive deals
+            Unite a BernalForge para acceder a ofertas exclusivas
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm font-medium mb-2">
-                Email
+                Correo Electrónico
               </label>
               <input
                 type="email"
@@ -84,13 +84,13 @@ export default function SignUpPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 className="w-full rounded-md border border-input bg-background px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                placeholder="you@example.com"
+                placeholder="tu@email.com"
               />
             </div>
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium mb-2">
-                Password
+                Contraseña
               </label>
               <div className="relative">
                 <input
@@ -101,7 +101,7 @@ export default function SignUpPage() {
                   required
                   minLength={6}
                   className="w-full rounded-md border border-input bg-background px-4 py-2 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                  placeholder="At least 6 characters"
+                  placeholder="Mínimo 6 caracteres"
                 />
                 <button
                   type="button"
@@ -115,7 +115,7 @@ export default function SignUpPage() {
 
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-medium mb-2">
-                Confirm Password
+                Confirmar Contraseña
               </label>
               <input
                 type={showPassword ? 'text' : 'password'}
@@ -124,7 +124,7 @@ export default function SignUpPage() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
                 className="w-full rounded-md border border-input bg-background px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                placeholder="Confirm your password"
+                placeholder="Confirmá tu contraseña"
               />
             </div>
 
@@ -133,20 +133,20 @@ export default function SignUpPage() {
               disabled={isLoading}
               className="w-full rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              {isLoading ? 'Creating account...' : 'Create Account'}
+              {isLoading ? 'Creando cuenta...' : 'Crear Cuenta'}
             </button>
           </form>
 
           <div className="mt-6 text-center text-sm">
-            <span className="text-muted-foreground">Already have an account? </span>
+            <span className="text-muted-foreground">¿Ya tenés cuenta? </span>
             <Link href="/auth/login" className="text-primary hover:underline">
-              Sign in
+              Iniciar Sesión
             </Link>
           </div>
         </div>
 
         <p className="text-center text-xs text-muted-foreground mt-4">
-          By creating an account, you agree to our Terms of Service and Privacy Policy.
+          Al crear una cuenta, aceptás nuestros Términos de Servicio y Política de Privacidad.
         </p>
       </div>
     </div>

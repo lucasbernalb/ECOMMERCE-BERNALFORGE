@@ -86,28 +86,28 @@ export default async function AdminDashboard() {
 
   const statCards = [
     {
-      name: 'Total Revenue',
+      name: 'Ingresos Totales',
       value: `$${stats.totalRevenue.toFixed(2)}`,
       icon: DollarSign,
       color: 'text-green-500',
       bgColor: 'bg-green-500/10',
     },
     {
-      name: 'Total Orders',
+      name: 'Pedidos Totales',
       value: stats.totalOrders,
       icon: ShoppingCart,
       color: 'text-blue-500',
       bgColor: 'bg-blue-500/10',
     },
     {
-      name: 'Products',
+      name: 'Productos',
       value: stats.totalProducts,
       icon: Package,
       color: 'text-primary',
       bgColor: 'bg-primary/10',
     },
     {
-      name: 'Categories',
+      name: 'Categorías',
       value: stats.totalCategories,
       icon: FolderOpen,
       color: 'text-purple-500',
@@ -118,9 +118,9 @@ export default async function AdminDashboard() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Dashboard</h1>
+        <h1 className="text-3xl font-bold">Panel de Control</h1>
         <p className="text-muted-foreground mt-1">
-          Welcome back! Here&apos;s an overview of your store.
+          ¡Bienvenido! Aquí tenés un resumen de tu tienda.
         </p>
       </div>
 
@@ -151,10 +151,10 @@ export default async function AdminDashboard() {
               </div>
               <div>
                 <p className="font-semibold text-yellow-600 dark:text-yellow-400">
-                  {stats.pendingOrders} Pending Orders
+                  {stats.pendingOrders} Pedidos Pendientes
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  Orders waiting to be processed
+                  Pedidos esperando ser procesados
                 </p>
               </div>
             </div>
@@ -165,31 +165,31 @@ export default async function AdminDashboard() {
       {/* Recent Orders */}
       <div className="rounded-lg border border-border">
         <div className="border-b border-border px-6 py-4">
-          <h2 className="text-lg font-semibold">Recent Orders</h2>
+          <h2 className="text-lg font-semibold">Pedidos Recientes</h2>
         </div>
         <div className="overflow-x-auto">
           {recentOrders.length === 0 ? (
             <div className="p-6 text-center text-muted-foreground">
-              No orders yet
+              No hay pedidos todavía
             </div>
           ) : (
             <table className="w-full">
               <thead>
                 <tr className="border-b border-border bg-muted/50">
                   <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                    Order ID
+                    ID Pedido
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                    Customer
+                    Cliente
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                     Total
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                    Status
+                    Estado
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                    Date
+                    Fecha
                   </th>
                 </tr>
               </thead>
@@ -218,11 +218,15 @@ export default async function AdminDashboard() {
                         order.status === 'delivered' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' :
                         'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400'
                       }`}>
-                        {order.status}
+                        {order.status === 'pending' ? 'Pendiente' :
+                         order.status === 'processing' ? 'Procesando' :
+                         order.status === 'shipped' ? 'Enviado' :
+                         order.status === 'delivered' ? 'Entregado' :
+                         order.status === 'cancelled' ? 'Cancelado' : order.status}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
-                      {new Date(order.created_at).toLocaleDateString()}
+                      {new Date(order.created_at).toLocaleDateString('es-AR')}
                     </td>
                   </tr>
                 ))}

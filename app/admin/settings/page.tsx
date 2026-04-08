@@ -7,9 +7,9 @@ export default async function AdminSettingsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Settings</h1>
+        <h1 className="text-3xl font-bold">Configuración</h1>
         <p className="text-muted-foreground mt-1">
-          Manage your store settings
+          Gestioná la configuración de tu tienda
         </p>
       </div>
 
@@ -21,15 +21,15 @@ export default async function AdminSettingsPage() {
               <Store className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <h2 className="font-semibold">Store Information</h2>
+              <h2 className="font-semibold">Información de la Tienda</h2>
               <p className="text-sm text-muted-foreground">
-                Update your store details
+                Actualizá los detalles de tu tienda
               </p>
             </div>
           </div>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Store Name</label>
+              <label className="block text-sm font-medium mb-2">Nombre de la Tienda</label>
               <input
                 type="text"
                 defaultValue="BernalForge Tools"
@@ -38,10 +38,10 @@ export default async function AdminSettingsPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Contact Email</label>
+              <label className="block text-sm font-medium mb-2">Email de Contacto</label>
               <input
                 type="email"
-                defaultValue="support@bernalforge.com"
+                defaultValue="soporte@bernalforge.com"
                 className="w-full rounded-md border border-input bg-background px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                 readOnly
               />
@@ -56,20 +56,20 @@ export default async function AdminSettingsPage() {
               <CreditCard className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <h2 className="font-semibold">Payment Settings</h2>
+              <h2 className="font-semibold">Configuración de Pago</h2>
               <p className="text-sm text-muted-foreground">
-                Configure payment methods
+                Configurá los métodos de pago
               </p>
             </div>
           </div>
           <div className="space-y-3">
             <div className="flex items-center justify-between rounded-md border border-border p-3">
-              <span className="text-sm">Credit/Debit Cards</span>
-              <span className="text-xs text-green-600 dark:text-green-400">Enabled</span>
+              <span className="text-sm">Tarjetas de Crédito/Débito</span>
+              <span className="text-xs text-green-600 dark:text-green-400">Activado</span>
             </div>
             <div className="flex items-center justify-between rounded-md border border-border p-3">
-              <span className="text-sm">PayPal</span>
-              <span className="text-xs text-green-600 dark:text-green-400">Enabled</span>
+              <span className="text-sm">MercadoPago</span>
+              <span className="text-xs text-green-600 dark:text-green-400">Activado</span>
             </div>
           </div>
         </div>
@@ -81,23 +81,23 @@ export default async function AdminSettingsPage() {
               <Mail className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <h2 className="font-semibold">Email Notifications</h2>
+              <h2 className="font-semibold">Notificaciones por Email</h2>
               <p className="text-sm text-muted-foreground">
-                Manage email preferences
+                Gestioná las preferencias de email
               </p>
             </div>
           </div>
           <div className="space-y-3">
             <label className="flex items-center justify-between">
-              <span className="text-sm">Order confirmation emails</span>
+              <span className="text-sm">Emails de confirmación de pedido</span>
               <input type="checkbox" defaultChecked className="accent-primary" />
             </label>
             <label className="flex items-center justify-between">
-              <span className="text-sm">Shipping notification emails</span>
+              <span className="text-sm">Emails de notificación de envío</span>
               <input type="checkbox" defaultChecked className="accent-primary" />
             </label>
             <label className="flex items-center justify-between">
-              <span className="text-sm">Marketing emails</span>
+              <span className="text-sm">Emails de marketing</span>
               <input type="checkbox" className="accent-primary" />
             </label>
           </div>
@@ -110,20 +110,20 @@ export default async function AdminSettingsPage() {
               <Shield className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <h2 className="font-semibold">Security</h2>
+              <h2 className="font-semibold">Seguridad</h2>
               <p className="text-sm text-muted-foreground">
-                Security and access settings
+                Configuración de seguridad y acceso
               </p>
             </div>
           </div>
           <div className="space-y-3">
             <div className="flex items-center justify-between rounded-md border border-border p-3">
-              <span className="text-sm">Two-factor authentication</span>
-              <span className="text-xs text-muted-foreground">Not configured</span>
+              <span className="text-sm">Autenticación de dos factores</span>
+              <span className="text-xs text-muted-foreground">No configurado</span>
             </div>
             <div className="flex items-center justify-between rounded-md border border-border p-3">
-              <span className="text-sm">Session timeout</span>
-              <span className="text-xs text-muted-foreground">24 hours</span>
+              <span className="text-sm">Tiempo de sesión</span>
+              <span className="text-xs text-muted-foreground">24 horas</span>
             </div>
           </div>
         </div>

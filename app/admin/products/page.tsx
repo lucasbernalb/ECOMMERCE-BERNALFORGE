@@ -36,9 +36,9 @@ export default async function AdminProductsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Products</h1>
+          <h1 className="text-3xl font-bold">Productos</h1>
           <p className="text-muted-foreground mt-1">
-            Manage your product inventory
+            Gestiona tu inventario de productos
           </p>
         </div>
         <Link
@@ -46,7 +46,7 @@ export default async function AdminProductsPage() {
           className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
         >
           <Plus className="h-4 w-4" />
-          Add Product
+          Agregar Producto
         </Link>
       </div>
 
@@ -55,16 +55,16 @@ export default async function AdminProductsPage() {
           {products.length === 0 ? (
             <div className="p-12 text-center">
               <Package className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <p className="text-lg font-medium">No products yet</p>
+              <p className="text-lg font-medium">No hay productos todavía</p>
               <p className="text-muted-foreground mt-1">
-                Get started by adding your first product
+                Empezá agregando tu primer producto
               </p>
               <Link
                 href="/admin/products/new"
                 className="inline-flex items-center gap-2 mt-6 rounded-md bg-primary px-6 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
               >
                 <Plus className="h-4 w-4" />
-                Add Product
+                Agregar Producto
               </Link>
             </div>
           ) : (
@@ -72,22 +72,22 @@ export default async function AdminProductsPage() {
               <thead>
                 <tr className="border-b border-border bg-muted/50">
                   <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                    Product
+                    Producto
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                    Category
+                    Categoría
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                    Price
+                    Precio
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                     Stock
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                    Status
+                    Estado
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                    Actions
+                    Acciones
                   </th>
                 </tr>
               </thead>
@@ -96,7 +96,7 @@ export default async function AdminProductsPage() {
                   <tr key={product.id} className="hover:bg-muted/50">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-md bg-muted">
+                        <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-md">
                           {product.images?.[0] ? (
                             <Image
                               src={product.images[0]}
@@ -105,8 +105,8 @@ export default async function AdminProductsPage() {
                               className="object-cover"
                             />
                           ) : (
-                            <div className="flex h-full w-full items-center justify-center">
-                              <Package className="h-5 w-5 text-muted-foreground" />
+                            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-zinc-800 via-zinc-900 to-zinc-950">
+                              <Package className="h-5 w-5 text-orange-500/30" />
                             </div>
                           )}
                         </div>
@@ -133,12 +133,12 @@ export default async function AdminProductsPage() {
                       <div className="flex gap-1">
                         {product.featured && (
                           <span className="inline-flex rounded bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
-                            Featured
+                            Destacado
                           </span>
                         )}
                         {product.best_seller && (
                           <span className="inline-flex rounded bg-green-500/10 px-2 py-0.5 text-xs font-medium text-green-600 dark:text-green-400">
-                            Best Seller
+                            Más Vendido
                           </span>
                         )}
                       </div>
@@ -148,7 +148,7 @@ export default async function AdminProductsPage() {
                         href={`/admin/products/${product.id}/edit`}
                         className="text-sm text-primary hover:underline"
                       >
-                        Edit
+                        Editar
                       </Link>
                     </td>
                   </tr>

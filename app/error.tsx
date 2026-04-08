@@ -23,12 +23,12 @@ export default function Error({
             <AlertCircle className="h-10 w-10 text-destructive" />
           </div>
         </div>
-        <h2 className="text-2xl font-bold">Something went wrong</h2>
+        <h2 className="text-2xl font-bold">Algo salió mal</h2>
         <p className="text-muted-foreground">
-          We&apos;ve encountered an unexpected error. Please try again.
+          Encontramos un error inesperado. Por favor, intentá de nuevo.
         </p>
         <Button onClick={reset} className="mt-4">
-          Try again
+          Intentar de nuevo
         </Button>
       </div>
     </div>

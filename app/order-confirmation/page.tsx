@@ -22,14 +22,14 @@ export default async function OrderConfirmationPage({ searchParams }: OrderConfi
             </div>
           </div>
 
-          <h1 className="text-3xl font-bold">Order Confirmed!</h1>
+          <h1 className="text-3xl font-bold">¡Pedido Confirmado!</h1>
           <p className="text-muted-foreground mt-4">
-            Thank you for your purchase. Your order has been received and is being processed.
+            Gracias por tu compra. Tu pedido fue recibido y está siendo procesado.
           </p>
 
           {orderId && (
             <div className="mt-6 rounded-lg border border-border bg-muted/30 p-4">
-              <p className="text-sm text-muted-foreground">Order Number</p>
+              <p className="text-sm text-muted-foreground">Número de Pedido</p>
               <p className="font-mono font-semibold mt-1">{orderId.slice(0, 8).toUpperCase()}</p>
             </div>
           )}
@@ -40,9 +40,9 @@ export default async function OrderConfirmationPage({ searchParams }: OrderConfi
                 <Mail className="h-5 w-5 text-primary" />
               </div>
               <div>
-                <p className="font-medium">Confirmation Email Sent</p>
+                <p className="font-medium">Email de Confirmación Enviado</p>
                 <p className="text-sm text-muted-foreground">
-                  Check your inbox for order details
+                  Revisá tu casilla de entrada para ver los detalles del pedido
                 </p>
               </div>
             </div>
@@ -52,9 +52,9 @@ export default async function OrderConfirmationPage({ searchParams }: OrderConfi
                 <Package className="h-5 w-5 text-primary" />
               </div>
               <div>
-                <p className="font-medium">Shipping Updates</p>
+                <p className="font-medium">Actualizaciones de Envío</p>
                 <p className="text-sm text-muted-foreground">
-                  We&apos;ll notify you when your order ships
+                  Te notificaremos cuando tu pedido sea enviado
                 </p>
               </div>
             </div>
@@ -65,14 +65,14 @@ export default async function OrderConfirmationPage({ searchParams }: OrderConfi
               href="/account/orders"
               className="inline-flex items-center justify-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
             >
-              View Order Status
+              Ver Estado del Pedido
               <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
               href="/"
               className="inline-flex items-center justify-center gap-2 rounded-md border border-border px-6 py-3 text-sm font-medium hover:bg-accent transition-colors"
             >
-              Continue Shopping
+              Continuar Comprando
             </Link>
           </div>
         </div>

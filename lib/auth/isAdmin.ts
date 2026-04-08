@@ -11,7 +11,7 @@ export async function checkAdmin(): Promise<AdminCheckResult> {
     const supabase = await createClient()
     
     // Try to get current user
-    let { data: { user }, error: getUserError } = await supabase.auth.getUser()
+    let { data: { user } } = await supabase.auth.getUser()
 
     // If no user from cookies, try refreshing session
     if (!user) {
@@ -62,7 +62,7 @@ export async function requireAuth(): Promise<string> {
   try {
     const supabase = await createClient()
     
-    let { data: { user }, error: getUserError } = await supabase.auth.getUser()
+    let { data: { user } } = await supabase.auth.getUser()
 
     // If no user from cookies, try refreshing session
     if (!user) {
