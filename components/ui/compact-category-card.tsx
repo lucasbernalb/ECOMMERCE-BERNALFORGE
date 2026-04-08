@@ -9,7 +9,7 @@ interface CompactCategoryCardProps {
 
 export function CompactCategoryCard({ category }: CompactCategoryCardProps) {
   return (
-    <Link href={`/categories/${category.slug}`} className="group flex-shrink-0">
+    <Link href={`/todas-las-categorias/${category.slug}`} className="group flex-shrink-0">
       <div className="relative overflow-hidden rounded-xl border border-border bg-card transition-all hover:border-primary/50 hover:shadow-md hover:scale-[1.02] w-[160px] sm:w-[180px]">
         {/* Image */}
         <div className="relative aspect-square bg-muted">
