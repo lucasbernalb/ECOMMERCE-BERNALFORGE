@@ -56,7 +56,7 @@ export default async function HomePage() {
               title="Productos Destacados"
               description="Herramientas profesionales seleccionadas"
               products={featuredProducts}
-              viewAllHref="/products?filter=featured"
+              viewAllHref="/todos-los-productos?filter=featured"
             />
           </div>
         </section>
@@ -67,7 +67,7 @@ export default async function HomePage() {
             title="Los Más Vendidos"
             description="Las preferidas de nuestros clientes"
             products={bestSellers}
-            viewAllHref="/products?filter=bestseller"
+            viewAllHref="/todos-los-productos?filter=bestseller"
           />
         </section>
 

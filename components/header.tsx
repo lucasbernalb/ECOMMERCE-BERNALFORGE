@@ -272,7 +272,7 @@ export function Header() {
                   <DropdownMenuSeparator />
                   {categories.map((category) => (
                     <DropdownMenuItem key={category.id} asChild>
-                      <Link href={`/categories/${category.slug}`}>
+                      <Link href={`/todas-las-categorias/${category.slug}`}>
                         {category.name}
                       </Link>
                     </DropdownMenuItem>
@@ -465,7 +465,7 @@ export function Header() {
                 {categories.slice(0, 4).map((category) => (
                   <Link
                     key={category.id}
-                    href={`/categories/${category.slug}`}
+                    href={`/todas-las-categorias/${category.slug}`}
                     onClick={() => setMobileMenuOpen(false)}
                     className="block rounded-md px-6 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
                   >
