@@ -5,6 +5,8 @@ import { createClient } from '@/lib/supabase/server'
 import { requireAdmin } from '@/lib/auth/isAdmin'
 import type { ProductWithCategory } from '@/lib/types'
 
+export const dynamic = 'force-dynamic'
+
 async function getProducts(): Promise<ProductWithCategory[]> {
   try {
     const supabase = await createClient()

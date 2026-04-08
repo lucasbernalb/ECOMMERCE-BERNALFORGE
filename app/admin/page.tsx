@@ -2,6 +2,8 @@ import { Package, FolderOpen, ShoppingCart, Users, DollarSign, TrendingUp } from
 import { createClient } from '@/lib/supabase/server'
 import { requireAdmin } from '@/lib/auth/isAdmin'
 
+export const dynamic = 'force-dynamic'
+
 interface Stats {
   totalProducts: number
   totalCategories: number

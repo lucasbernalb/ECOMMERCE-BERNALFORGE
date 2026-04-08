@@ -4,6 +4,8 @@ import { slugify } from "@/lib/slugify"
 import { ProductForm } from "./product-form"
 import { requireAdmin } from "@/lib/auth/isAdmin"
 
+export const dynamic = 'force-dynamic'
+
 async function createProduct(
   _prevState: { success: boolean; error?: string },
   formData: FormData

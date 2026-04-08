@@ -1,6 +1,8 @@
 import { Settings, Store, CreditCard, Mail, Shield } from 'lucide-react'
 import { requireAdmin } from '@/lib/auth/isAdmin'
 
+export const dynamic = 'force-dynamic'
+
 export default async function AdminSettingsPage() {
   await requireAdmin()
 

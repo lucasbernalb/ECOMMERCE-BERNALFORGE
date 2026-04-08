@@ -3,6 +3,8 @@ import { createClient } from '@/lib/supabase/server'
 import { requireAdmin } from '@/lib/auth/isAdmin'
 import type { Profile } from '@/lib/types'
 
+export const dynamic = 'force-dynamic'
+
 async function getCustomers(): Promise<Profile[]> {
   try {
     const supabase = await createClient()

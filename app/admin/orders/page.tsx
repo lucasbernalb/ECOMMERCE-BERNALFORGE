@@ -2,6 +2,8 @@ import { requireAdmin } from '@/lib/auth/isAdmin'
 import { getOrders } from '@/lib/actions/orders'
 import { AdminOrdersClient } from './orders-client'
 
+export const dynamic = 'force-dynamic'
+
 export default async function AdminOrdersPage() {
   // Server-side admin check
   const adminResult = await requireAdmin()
