@@ -150,7 +150,7 @@ export function HeroSection() {
             {/* CTA Section */}
             <div className="space-y-5">
               <Link
-                href="/todas-las-categorias/power-tools"
+                href="/todas-las-categorias/herramientas-electricas"
                 className="group relative inline-flex w-full sm:w-auto items-center justify-center gap-4 overflow-hidden rounded-2xl bg-gradient-to-r from-orange-600 to-orange-500 px-12 py-6 text-xl font-bold text-white shadow-2xl shadow-orange-500/40 transition-all duration-300 hover:shadow-orange-500/60 hover:scale-[1.02] active:scale-[0.98]"
               >
                 <ShoppingCart className="h-7 w-7 transition-transform duration-300 group-hover:scale-110" />
@@ -181,7 +181,7 @@ export function HeroSection() {
 
               {/* Secondary CTA */}
               <Link
-                href="/todas-las-categorias/power-tools"
+                href="/todas-las-categorias/herramientas-electricas"
                 className="group inline-flex items-center gap-2 text-base font-medium text-gray-300 transition-colors hover:text-white"
               >
                 <span>Ver todas las ofertas de temporada</span>
