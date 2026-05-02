@@ -161,7 +161,7 @@ Editá `.env.local` con tus credenciales de Supabase:
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://tu-proyecto.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=tu-anon-key
-NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL=http://localhost:3000/account
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
 4. **Obtener credenciales de Supabase**

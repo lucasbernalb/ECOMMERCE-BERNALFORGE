@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { Hammer, Mail, Phone, MapPin } from 'lucide-react'
+import { FooterBranding } from './footer-branding'
 
 const footerLinks = {
   shop: [
@@ -108,9 +109,12 @@ export function Footer() {
 
         {/* Bottom */}
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 sm:flex-row">
-          <p className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} BernalForge Tools. Todos los derechos reservados.
-          </p>
+          <div className="flex flex-col items-center gap-3 sm:flex-row sm:items-center">
+            <p className="text-sm text-muted-foreground">
+              &copy; {new Date().getFullYear()} BernalForge Tools. Todos los derechos reservados.
+            </p>
+            <FooterBranding />
+          </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <span className="rounded bg-muted px-2 py-1">Visa</span>

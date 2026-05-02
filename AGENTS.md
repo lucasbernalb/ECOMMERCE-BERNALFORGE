@@ -189,7 +189,7 @@ Create a `.env.local` file based on `.env.example`:
 ```
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL=http://localhost:3000/account
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
 ### Supabase Client Usage

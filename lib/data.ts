@@ -9,7 +9,7 @@ export async function getCategories(): Promise<Category[]> {
     .order('name')
 
   if (error) {
-    console.error('Error fetching categories:', error)
+    console.error('[getCategories] Supabase error:', error.message, '| Code:', error.code, '| Details:', error.details)
     return []
   }
 

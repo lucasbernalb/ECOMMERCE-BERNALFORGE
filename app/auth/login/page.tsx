@@ -33,8 +33,12 @@ export default function LoginPage() {
       toast.success('Sesión iniciada exitosamente')
       router.push('/account')
       router.refresh()
-    } catch {
-      toast.error('Ocurrió un error. Por favor, intentá de nuevo.')
+    } catch (err) {
+      const message = err instanceof TypeError && err.message === 'Failed to fetch'
+        ? 'No se pudo conectar con Supabase. Verificá tu conexión y las variables de entorno.'
+        : 'Ocurrió un error. Por favor, intentá de nuevo.'
+      toast.error(message)
+      console.error('[Login] Error:', err)
     } finally {
       setIsLoading(false)
     }

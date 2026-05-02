@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Hammer, Eye, EyeOff } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import { getSiteUrl } from '@/lib/url'
 import { toast } from 'sonner'
 
 export default function SignUpPage() {
@@ -36,8 +37,7 @@ export default function SignUpPage() {
         email,
         password,
         options: {
-          emailRedirectTo: process.env.NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL ||
-            `${window.location.origin}/account`,
+          emailRedirectTo: getSiteUrl('/auth/callback'),
         },
       })
 
@@ -47,8 +47,12 @@ export default function SignUpPage() {
       }
 
       router.push('/auth/sign-up-success')
-    } catch {
-      toast.error('Ocurrió un error. Por favor, intentá de nuevo.')
+    } catch (err) {
+      const message = err instanceof TypeError && err.message === 'Failed to fetch'
+        ? 'No se pudo conectar con Supabase. Verificá tu conexión y las variables de entorno.'
+        : 'Ocurrió un error. Por favor, intentá de nuevo.'
+      toast.error(message)
+      console.error('[SignUp] Error:', err)
     } finally {
       setIsLoading(false)
     }
